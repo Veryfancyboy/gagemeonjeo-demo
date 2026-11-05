@@ -394,11 +394,11 @@ function vRoom(id) {
   <p style="font-size:14px">${esc(r.why)}</p>
   <h3>다섯 자리</h3><div class="seats">
    <div class="seat first"><div class="t">가게 · 가장 먼저 채우는 자리</div><b>장사할 사람 ${p.n}/${p.total}칸 확약</b><span>업종·오픈일을 정하고 예약금(월세 1개월분)을 제휴 에스크로에 맡깁니다.</span></div>
-   <div class="seat"><div class="t">건물</div><b>임대인</b><span>참여 동의 전 (지금은 광고 단계)</span></div>
+   <div class="seat"><div class="t">건물</div><b>임대인</b><span>${PUB ? '참여 동의 전 (예시)' : '참여 동의 전 (지금은 광고 단계)'}</span></div>
    <div class="seat"><div class="t">설계</div><b>건축가 ${props ? props.length : 0}/3팀</b><span>${r.type === 'B' ? '신축이라 큰 설계 없이 칸 나누기·인허가 검토만' : '기획 경쟁 모집 중'}</span></div>
    <div class="seat"><div class="t">공사</div><b>인테리어·시공</b><span>${done ? '입찰 열림' : '확약 70% 뒤 입찰 열림'}</span></div>
    <div class="seat"><div class="t">돈</div><b>임대인 자금·대출</b><span>1단계는 투자자 연결 없음</span></div></div>
-  <h3>빈 칸 (네이버 광고 기준)</h3>
+  <h3>${PUB ? '빈 칸 (예시)' : '빈 칸 (네이버 광고 기준)'}</h3>
   ${r.units.map((u, i) => `<div class="u2"><div class="row"><b>${esc(u.f)} · ${esc(u.a)}</b><b>${esc(u.p)}</b></div><div class="lk" style="margin-top:4px">${(u.ids || []).map(x => `<a href="${nav(x)}" target="_blank" rel="noopener">매물 ${x}</a>`).join('')}${PUB ? '<span class="tiny">예시 칸 (실제 광고를 참고해 만든 예)</span>' : ''}</div>
    <div style="margin-top:8px">${flag(i) ? `<span class="tag g">확약 완료${mine.includes(i) ? ' · 내 확약' : ''}</span>` : (role === 'shop' || !role ? `<button class="btn sm" data-act="pledge" data-room="${r.id}" data-i="${i}">이 칸 확약하기</button>` : `<span class="tag l">빈칸</span>`)}</div></div>`).join('')}
   ${role === 'arch' ? `<button class="btn" data-act="propose" data-room="${r.id}">기획안 내기 (시연)</button>` : ''}
