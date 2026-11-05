@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#10231D">
+<title>가게먼저 · 공개 예시판</title>
+<meta property="og:title" content="가게먼저 (가칭) · 공개 예시판">
+<meta property="og:description" content="장사할 사람이 먼저 모이면, 건물·설계·공사·돈이 따라온다. 빈 상가 통계와 예시 프로젝트로 보는 부동산개발 연결 플랫폼 시제품.">
+<style>
+:root { --ink:#15191b; --g:#127A5A; --g2:#7FE0B5; --bg:#F4F3EF; --line:#e2e0d9; --mint:#E8F5EF; --amber:#b45309; --dark:#10231D; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; background: #d9dedb; font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', system-ui, sans-serif; color: var(--ink); word-break: keep-all; }
+button, input, select { font-family: inherit; }
+#app { max-width: 430px; margin: 0 auto; min-height: 100vh; background: #fff; position: relative; padding-bottom: 78px; box-shadow: 0 0 30px rgba(0,0,0,.08); }
+.top { position: sticky; top: 0; z-index: 40; background: var(--dark); color: #fff; padding: 12px 16px 11px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+.logo span { color: var(--g2); }
+.top .r { display: flex; gap: 6px; align-items: center; }
+.pill { font-size: 11px; border: 1px solid #3d5a50; color: #cfd9d5; border-radius: 99px; padding: 3px 9px; background: none; cursor: pointer; }
+.pill.demo { border-color: var(--g2); color: var(--g2); }
+.wrap { padding: 14px 16px; }
+h2 { font-size: 20px; margin: 4px 0 10px; letter-spacing: -0.02em; }
+h3 { font-size: 16px; margin: 16px 0 8px; }
+p { font-size: 14px; line-height: 1.6; margin: 0 0 8px; }
+.muted { color: #6b6f6d; font-size: 12.5px; line-height: 1.5; }
+.tiny { font-size: 11px; color: #8a8f8c; line-height: 1.5; }
+.card { border: 1px solid var(--line); border-radius: 14px; padding: 12px 13px; margin-bottom: 10px; background: #fff; }
+.card.mint { background: var(--mint); border-color: #cfe7db; }
+.card.dark { background: var(--dark); color: #fff; border: none; }
+.card.dark .muted { color: #cfd9d5; }
+.card.tap { cursor: pointer; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.btn { display: block; width: 100%; border: none; border-radius: 12px; background: var(--g); color: #fff; font-weight: 800; font-size: 15px; padding: 13px; cursor: pointer; text-align: center; text-decoration: none; }
+.btn.k { background: var(--ink); }
+.btn.w { background: #fff; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn.sm { display: inline-block; width: auto; font-size: 12.5px; padding: 7px 11px; border-radius: 9px; }
+.btn[disabled] { background: #c9ccca; cursor: default; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.chips.scroll { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.chips.scroll::-webkit-scrollbar { display: none; }
+.chip { flex: none; border: 1px solid #d3d1c9; border-radius: 99px; padding: 6px 11px; font-size: 13px; background: #fff; color: #333; cursor: pointer; user-select: none; }
+.chip.on { background: var(--g); border-color: var(--g); color: #fff; font-weight: 700; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: var(--ink); color: #fff; margin-right: 4px; vertical-align: middle; }
+.tag.g { background: var(--g); } .tag.a { background: var(--amber); } .tag.l { background: #e7e5de; color: #333; } .tag.m { background: var(--mint); color: var(--g); }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 12px; }
+.stat { background: var(--bg); border-radius: 12px; padding: 10px 11px; }
+.stat b { display: block; font-size: 21px; color: var(--g); letter-spacing: -0.02em; }
+.stat span { font-size: 11.5px; color: #444; line-height: 1.4; display: block; margin-top: 2px; }
+.bar { height: 8px; background: #e3e1da; border-radius: 99px; overflow: hidden; margin: 7px 0 4px; }
+.bar i { display: block; height: 100%; background: var(--g); border-radius: 99px; transition: width .4s; }
+.card.dark .bar { background: #34463f; } .card.dark .bar i { background: var(--g2); }
+label.f { display: block; font-size: 12.5px; font-weight: 700; color: #444; margin: 12px 0 5px; }
+input.t, select.t { width: 100%; border: 1px solid #d3d1c9; border-radius: 10px; padding: 11px 12px; font-size: 15px; background: #fff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.roles { display: grid; gap: 8px; margin-top: 14px; }
+.role { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--line); border-radius: 14px; padding: 13px 14px; cursor: pointer; background: #fff; text-align: left; width: 100%; }
+.role:hover { border-color: var(--g); }
+.role .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--mint); color: var(--g); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex: none; }
+.role b { display: block; font-size: 15.5px; }
+.role span { font-size: 12.5px; color: #666; }
+.hero { background: var(--dark); color: #fff; padding: 26px 18px 22px; }
+.hero h1 { font-size: 34px; margin: 6px 0 8px; letter-spacing: -0.03em; }
+.hero h1 span { color: var(--g2); }
+.hero p { color: #cfd9d5; font-size: 14.5px; }
+.hero .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 14px; }
+.hero .facts div { border: 1px solid #3d5a50; border-radius: 11px; padding: 9px 8px; }
+.hero .facts b { display: block; color: var(--g2); font-size: 18px; }
+.hero .facts span { font-size: 11px; color: #cfd9d5; line-height: 1.35; display: block; }
+/* map */
+.map { position: relative; height: 300px; border-radius: 14px; overflow: hidden; background: #e8ebe9; touch-action: none; cursor: grab; user-select: none; }
+.map .layer { position: absolute; inset: 0; }
+.map img.tile { position: absolute; width: 256px; height: 256px; pointer-events: none; user-select: none; }
+.mk { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.35); cursor: pointer; }
+.mk.v { background: var(--g); }
+.mk.m { background: #3fae86; }
+.mk.u { background: #9aa39f; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+.mk.o { background: #c98a3a; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+.mk.room { width: auto; height: auto; border-radius: 8px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; padding: 3px 7px; margin: -26px 0 0 -18px; border: 2px solid var(--g2); white-space: nowrap; z-index: 5; }
+.mk.sel { outline: 3px solid #ffd54a; z-index: 6; }
+.mk.bub { width: auto; height: auto; border-radius: 99px; background: rgba(18,122,90,.92); color: #fff; font-size: 11.5px; font-weight: 800; padding: 4px 9px; margin: -14px 0 0 -32px; white-space: nowrap; border: 2px solid #fff; }
+.mk.bub.on { background: #15191b; border-color: #7FE0B5; z-index: 7; }
+.map .zoom { position: absolute; right: 8px; top: 8px; display: grid; gap: 4px; z-index: 8; }
+.map .zoom button { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #ccc; background: #fff; font-size: 18px; font-weight: 800; cursor: pointer; }
+.map .attr { position: absolute; left: 6px; bottom: 4px; font-size: 9.5px; color: #555; background: rgba(255,255,255,.75); padding: 1px 5px; border-radius: 4px; z-index: 8; }
+.legend { display: flex; gap: 10px; font-size: 11.5px; color: #555; margin: 6px 2px 8px; flex-wrap: wrap; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+.unit { border-bottom: 1px solid var(--line); padding: 10px 2px; cursor: pointer; }
+.unit .h { display: flex; justify-content: space-between; gap: 8px; }
+.unit .h b { font-size: 14.5px; }
+.unit .pr { font-weight: 800; white-space: nowrap; font-size: 14.5px; }
+.unit .ds { font-size: 12.5px; color: #555; margin-top: 2px; }
+.sheet { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 430px; background: #fff; border-radius: 18px 18px 0 0; box-shadow: 0 -8px 30px rgba(0,0,0,.18); z-index: 60; padding: 10px 16px 22px; }
+.sheet .grab { width: 40px; height: 4px; border-radius: 9px; background: #ddd; margin: 0 auto 10px; }
+.dim { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 55; }
+/* rooms */
+.bld { display: flex; flex-direction: column-reverse; gap: 4px; background: #DCE9E3; border-radius: 12px; padding: 12px 18% 10px; margin-bottom: 10px; }
+.bld div { border-radius: 5px; padding: 7px 8px; font-size: 12px; font-weight: 800; text-align: center; background: #fff; border: 1.5px dashed var(--amber); color: var(--amber); }
+.bld div.ok { background: var(--g); border: 1.5px solid var(--g); color: #fff; }
+.seats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.seat { border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; }
+.seat .t { font-size: 11px; font-weight: 800; color: var(--g); }
+.seat b { display: block; font-size: 13.5px; margin: 2px 0; }
+.seat span { font-size: 12px; color: #555; line-height: 1.45; display: block; }
+.seat.first { background: var(--mint); border-color: var(--g); grid-column: span 2; }
+.u2 { border: 1px solid var(--line); border-radius: 12px; padding: 10px 11px; margin-bottom: 8px; }
+.u2 .row b { font-size: 14.5px; }
+.u2 .lk a { font-size: 11.5px; color: #1d4ed8; margin-right: 8px; text-decoration: none; }
+.lock { font-size: 12.5px; color: #777; background: var(--bg); border-radius: 10px; padding: 9px 11px; }
+/* nav */
+nav.tab { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #fff; border-top: 1px solid var(--line); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom); }
+nav.tab a { flex: 1; text-align: center; padding: 8px 0 9px; font-size: 11px; color: #858a87; text-decoration: none; }
+nav.tab a svg { display: block; margin: 0 auto 2px; width: 22px; height: 22px; }
+nav.tab a.on { color: var(--g); font-weight: 800; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 92px; background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 99px; font-size: 13px; z-index: 80; white-space: nowrap; }
+.dt { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.dt th, .dt td { padding: 7px 4px; border-bottom: 1px solid var(--line); text-align: left; }
+.dt th { font-size: 11.5px; color: #666; }
+.dt tr.us td { background: var(--mint); font-weight: 700; }
+.hbar { display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin: 5px 0; }
+.hbar span.n { width: 64px; flex: none; }
+.hbar .b { flex: 1; height: 14px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.hbar .b i { display: block; height: 100%; background: var(--g); }
+.hbar em { font-style: normal; width: 46px; text-align: right; font-weight: 700; flex: none; }
+.ok-big { text-align: center; padding: 18px 6px 6px; }
+.ok-big .c { width: 64px; height: 64px; border-radius: 50%; background: var(--mint); color: var(--g); font-size: 30px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script id="data" type="application/json">{"mode":"public","asOf":"2026-11-05 밤","dongs":[{"n":"연남동","c":[37.562,126.925],"f1":408,"vp":36,"ev":150,"ma":49,"mr":230,"md":3000,"rp":15.7,"ap":13.6,"gm":13.2,"o30":62,"wl":23},{"n":"망원동","c":[37.556,126.906],"f1":330,"vp":30,"ev":100,"ma":36,"mr":180,"md":2000,"rp":14.9,"ap":12.2,"gm":null,"o30":64,"wl":17},{"n":"연희동","c":[37.568,126.931],"f1":107,"vp":26,"ev":30,"ma":44,"mr":180,"md":3000,"rp":13.2,"ap":9.9,"gm":6.3,"o30":84,"wl":6},{"n":"합정동","c":[37.548,126.914],"f1":252,"vp":32,"ev":80,"ma":54,"mr":250,"md":3000,"rp":16.5,"ap":13.3,"gm":12.9,"o30":64,"wl":9},{"n":"성수동2가","c":[37.544,127.056],"f1":354,"vp":28,"ev":100,"ma":67,"mr":370,"md":5000,"rp":17.9,"ap":14.2,"gm":12.8,"o30":62,"wl":12},{"n":"신당동","c":[37.561,127.014],"f1":221,"vp":36,"ev":80,"ma":64,"mr":310,"md":5000,"rp":15.7,"ap":13.2,"gm":6.1,"o30":46,"wl":5},{"n":"이태원동","c":[37.534,126.992],"f1":273,"vp":48,"ev":130,"ma":69,"mr":350,"md":5000,"rp":17.9,"ap":15.1,"gm":13.2,"o30":70,"wl":7},{"n":"송파동","c":[37.507,127.11],"f1":251,"vp":28,"ev":70,"ma":42,"mr":190,"md":3000,"rp":14.8,"ap":11.5,"gm":null,"o30":64,"wl":4},{"n":"문래동3가","c":[37.518,126.895],"f1":60,"vp":22,"ev":10,"ma":59,"mr":295,"md":3325,"rp":15,"ap":8.8,"gm":null,"o30":58,"wl":3}],"units":[],"cube":[[0,1,4,10,5],[0,1,4,7,8],[0,2,4,9,4],[0,1,8,17,1],[0,1,11,20,1],[0,2,3,5,1],[0,2,9,21,1],[0,1,7,14,1],[0,1,7,20,2],[0,1,3,6,2],[0,1,5,10,1],[0,2,6,9,4],[0,2,5,10,6],[0,1,14,42,1],[0,1,30,50,5],[0,2,7,16,2],[0,1,2,5,5],[0,2,4,7,6],[0,2,8,13,1],[0,1,9,14,1],[0,1,4,11,6],[0,1,8,15,3],[0,1,3,8,5],[0,2,3,7,2],[0,2,5,11,8],[0,2,6,10,1],[0,2,8,18,1],[0,1,6,30,1],[0,2,14,20,1],[0,1,8,12,2],[0,1,9,12,2],[0,2,5,9,2],[0,1,2,8,7],[0,1,7,12,2],[0,1,7,35,3],[0,1,2,7,13],[0,2,10,33,1],[0,1,7,19,3],[0,1,9,20,1],[0,2,12,14,1],[0,1,3,10,3],[0,1,3,13,3],[0,2,4,12,1],[0,2,8,16,2],[0,1,3,9,1],[0,2,8,14,2],[0,2,9,14,3],[0,2,6,15,2],[0,2,6,11,6],[0,1,7,15,5],[0,1,3,7,10],[0,1,6,14,2],[0,1,1,7,2],[0,1,8,21,2],[0,1,5,12,1],[0,1,7,17,2],[0,2,6,25,3],[0,1,6,11,3],[0,2,6,19,2],[0,1,18,50,2],[0,1,9,25,4],[0,1,13,25,1],[0,2,8,22,1],[0,2,2,10,1],[0,2,29,50,1],[0,1,6,35,1],[0,1,26,50,1],[0,2,8,33,1],[0,2,12,17,1],[0,2,9,10,1],[0,1,2,6,3],[0,1,1,8,1],[0,2,9,13,1],[0,1,29,50,1],[0,1,13,22,1],[0,2,2,7,1],[0,1,5,11,1],[0,2,7,12,1],[0,2,5,19,1],[0,2,6,6,1],[0,2,7,11,1],[0,1,6,25,1],[0,2,4,10,3],[0,2,4,11,2],[0,2,3,11,3],[0,1,5,7,1],[0,2,4,6,1],[0,2,8,9,2],[0,2,3,4,1],[0,1,0,2,1],[0,1,5,14,1],[0,2,6,16,3],[0,1,27,50,1],[0,1,18,37,1],[0,1,8,18,1],[0,1,1,5,1],[0,2,7,10,2],[0,2,2,5,1],[0,1,11,19,1],[0,1,17,21,1],[0,1,4,18,2],[0,2,6,8,1],[0,2,3,9,1],[0,2,7,20,1],[0,1,7,11,1],[0,1,11,14,1],[0,1,19,36,1],[0,1,6,17,1],[0,1,10,19,1],[0,2,5,8,1],[0,1,8,10,1],[0,2,4,4,1],[0,1,2,2,1],[0,1,16,25,1],[0,1,2,11,1],[0,1,12,27,1],[0,2,8,12,1],[0,2,7,17,1],[0,2,11,17,1],[0,1,2,13,1],[0,2,3,10,1],[0,2,13,9,1],[0,1,8,20,1],[0,1,9,22,1],[0,1,4,9,1],[0,1,6,10,1],[0,1,6,13,1],[0,1,4,12,1],[0,1,4,6,1],[0,2,7,14,1],[0,1,4,14,1],[0,1,5,16,1],[0,2,9,12,1],[1,1,4,11,1],[1,1,1,5,2],[1,2,14,17,1],[1,2,6,8,1],[1,2,7,8,1],[1,1,2,11,2],[1,2,11,13,2],[1,1,3,9,1],[1,2,4,8,2],[1,1,3,7,1],[1,2,5,9,1],[1,1,3,8,6],[1,1,3,17,1],[1,1,13,17,1],[1,1,4,15,2],[1,1,6,12,1],[1,1,2,5,7],[1,2,5,12,1],[1,1,5,15,1],[1,2,8,16,1],[1,2,17,17,1],[1,1,5,8,1],[1,2,6,10,1],[1,1,3,6,7],[1,2,8,13,1],[1,2,5,7,2],[1,1,2,6,4],[1,2,10,16,1],[1,1,2,7,2],[1,1,2,10,2],[1,1,5,12,1],[1,1,12,27,1],[1,1,8,27,3],[1,2,7,9,1],[1,1,7,12,1],[1,1,2,8,3],[1,1,7,15,1],[1,1,6,14,1],[1,2,19,34,2],[1,1,2,20,1],[1,2,22,30,1],[1,1,3,11,1],[1,2,12,10,1],[1,2,10,20,1],[1,1,3,12,2],[1,2,9,13,1],[1,2,19,18,1],[1,2,14,13,1],[1,1,5,10,2],[1,1,3,5,1],[1,1,8,12,1],[1,2,4,12,1],[1,1,6,8,1],[1,1,23,42,2],[1,1,4,12,1],[1,2,14,19,1],[1,2,14,18,3],[1,1,4,9,1],[1,2,25,34,1],[1,1,4,8,1],[1,1,6,9,1],[1,2,12,7,1],[1,2,16,18,1],[1,1,6,10,2],[1,2,11,21,1],[1,1,5,14,1],[1,1,1,4,1],[1,1,30,50,1],[1,2,7,11,1],[1,2,2,8,1],[1,2,20,32,1],[1,1,8,10,1],[1,1,6,11,1],[2,1,1,3,2],[2,2,7,8,1],[2,1,3,5,2],[2,1,5,9,1],[2,1,2,8,3],[2,1,3,3,1],[2,1,5,8,1],[2,1,17,27,1],[2,1,7,12,1],[2,1,12,14,1],[2,1,7,10,1],[2,2,9,15,2],[2,1,10,25,1],[2,2,11,17,1],[2,1,30,50,1],[2,1,3,6,3],[2,1,3,9,1],[2,1,3,8,2],[2,2,26,47,2],[2,1,7,18,1],[2,1,6,18,1],[2,1,15,30,1],[2,1,9,15,1],[2,2,13,12,1],[2,1,11,20,1],[2,2,2,5,1],[2,2,4,7,1],[2,2,18,17,1],[2,2,17,17,1],[2,1,6,9,1],[2,2,5,6,1],[2,1,2,5,2],[2,2,1,5,1],[2,1,2,7,1],[2,1,4,35,1],[2,2,15,17,1],[2,1,8,11,1],[2,1,16,20,1],[2,1,14,20,1],[2,1,6,11,1],[2,2,6,5,1],[2,2,8,12,1],[2,1,5,11,1],[2,2,11,13,1],[2,1,2,6,1],[2,1,1,5,1],[2,1,4,16,1],[2,2,26,15,1],[2,1,6,8,1],[3,1,7,19,3],[3,2,4,9,1],[3,1,5,8,3],[3,1,4,11,2],[3,1,5,20,1],[3,1,7,12,2],[3,2,12,22,1],[3,2,6,7,1],[3,2,7,8,1],[3,1,7,16,1],[3,1,3,9,2],[3,2,3,7,2],[3,1,18,50,2],[3,1,7,15,2],[3,2,3,11,3],[3,1,7,10,2],[3,1,3,15,3],[3,2,18,50,1],[3,2,9,12,1],[3,2,10,50,1],[3,2,11,25,1],[3,1,2,15,1],[3,2,8,15,1],[3,1,4,10,2],[3,2,4,10,1],[3,1,3,8,1],[3,1,4,9,2],[3,1,5,15,3],[3,1,12,30,1],[3,1,11,32,1],[3,1,5,11,4],[3,2,5,7,1],[3,1,8,32,2],[3,1,30,50,2],[3,1,6,17,1],[3,2,16,23,1],[3,2,10,17,1],[3,1,3,7,1],[3,1,8,22,1],[3,1,4,20,1],[3,1,3,10,7],[3,1,2,4,1],[3,1,2,10,1],[3,1,5,10,3],[3,2,5,20,1],[3,1,4,12,1],[3,2,9,23,1],[3,2,6,32,1],[3,2,4,7,2],[3,2,2,11,1],[3,1,8,23,1],[3,2,6,17,1],[3,1,9,15,1],[3,1,16,30,1],[3,2,18,42,1],[3,2,13,25,1],[3,2,6,12,1],[3,1,8,11,1],[3,2,8,50,1],[3,2,4,6,1],[3,2,5,12,1],[3,2,7,13,1],[3,2,8,11,2],[3,2,16,50,1],[3,1,8,15,1],[3,2,3,6,1],[3,1,7,22,2],[3,1,3,14,1],[3,2,6,11,2],[3,2,5,6,1],[3,1,3,6,1],[3,2,8,13,1],[3,1,6,11,1],[3,1,5,12,1],[3,1,14,33,1],[3,1,2,6,1],[3,2,3,8,1],[3,2,5,8,1],[3,1,7,20,1],[3,1,1,3,1],[3,2,7,14,1],[3,2,30,50,1],[4,2,9,20,2],[4,1,2,4,1],[4,1,30,50,17],[4,2,6,12,2],[4,1,18,50,1],[4,1,20,42,3],[4,2,4,10,2],[4,1,11,50,3],[4,1,13,40,1],[4,1,5,20,1],[4,1,29,50,3],[4,2,5,20,1],[4,1,5,17,2],[4,1,25,45,1],[4,2,4,12,4],[4,1,8,13,1],[4,1,5,12,5],[4,1,6,17,3],[4,2,16,32,1],[4,1,3,20,2],[4,2,11,15,2],[4,1,22,50,2],[4,1,13,50,4],[4,1,3,5,2],[4,1,26,50,5],[4,2,4,8,2],[4,1,24,50,1],[4,1,7,43,1],[4,1,9,18,3],[4,2,21,42,1],[4,1,19,42,1],[4,2,5,12,4],[4,1,2,14,4],[4,1,5,27,1],[4,2,5,24,1],[4,1,26,40,1],[4,1,10,50,1],[4,1,2,10,1],[4,2,5,11,2],[4,1,17,50,6],[4,1,16,35,3],[4,2,30,50,2],[4,1,19,50,1],[4,1,12,29,1],[4,1,12,50,4],[4,1,20,50,1],[4,2,2,4,1],[4,1,4,15,1],[4,2,13,32,2],[4,1,2,3,1],[4,1,10,29,1],[4,2,8,12,2],[4,1,11,35,1],[4,2,3,8,1],[4,1,13,22,1],[4,1,23,50,2],[4,1,9,21,1],[4,2,9,14,1],[4,1,1,4,1],[4,1,14,50,2],[4,2,7,20,5],[4,2,15,32,1],[4,1,11,22,2],[4,2,20,50,2],[4,1,3,4,2],[4,1,0,4,1],[4,2,9,35,1],[4,2,9,12,1],[4,1,15,50,1],[4,1,3,10,2],[4,2,18,20,1],[4,1,11,41,1],[4,1,7,35,1],[4,1,6,25,1],[4,2,10,22,1],[4,1,6,10,1],[4,2,19,50,1],[4,1,11,27,1],[4,2,9,9,1],[4,1,16,50,2],[4,1,23,32,2],[4,1,20,45,1],[4,1,18,30,1],[4,1,19,35,1],[4,2,3,4,1],[4,2,11,10,1],[4,1,5,15,1],[4,1,11,29,1],[4,1,21,45,1],[4,1,7,10,1],[4,1,4,17,1],[4,1,7,15,1],[4,1,8,10,1],[4,1,9,13,1],[4,2,4,11,1],[4,1,28,50,1],[4,1,4,8,1],[4,2,6,7,1],[4,1,7,27,1],[4,1,11,39,1],[4,1,7,25,1],[4,1,11,34,1],[4,1,13,49,1],[4,1,25,50,1],[4,1,4,4,1],[4,1,2,13,1],[5,1,3,8,7],[5,1,6,15,7],[5,1,4,9,3],[5,1,7,20,2],[5,1,10,12,1],[5,1,7,30,3],[5,2,14,33,3],[5,2,20,22,1],[5,1,11,25,1],[5,1,2,14,1],[5,1,5,22,3],[5,1,5,9,1],[5,1,7,22,2],[5,1,6,10,1],[5,1,4,20,2],[5,1,6,50,2],[5,1,7,17,1],[5,2,3,5,1],[5,1,24,50,2],[5,2,3,10,1],[5,2,8,12,1],[5,1,6,22,3],[5,1,30,30,1],[5,1,4,8,1],[5,2,2,6,1],[5,1,11,20,1],[5,1,5,12,1],[5,1,23,50,2],[5,1,4,10,1],[5,1,14,22,1],[5,1,19,50,3],[5,1,5,17,1],[5,1,6,11,1],[5,1,14,25,1],[5,1,1,6,1],[5,1,5,20,2],[5,2,29,34,1],[5,1,0,5,1],[5,1,17,22,1],[5,1,3,9,1],[5,1,22,50,2],[5,2,18,19,1],[5,2,6,13,2],[5,1,2,5,2],[5,1,2,6,3],[5,1,15,20,2],[5,1,13,20,1],[5,2,8,21,1],[5,2,20,46,2],[5,1,2,10,3],[5,2,9,17,1],[5,1,30,50,3],[5,1,2,40,1],[5,1,8,12,1],[5,1,4,7,1],[5,2,15,45,1],[5,2,5,15,1],[5,1,16,50,1],[5,1,9,20,1],[5,1,15,50,1],[5,2,0,1,1],[5,1,16,25,1],[5,1,2,9,1],[5,1,3,6,1],[5,1,8,24,1],[5,1,10,20,1],[5,1,1,5,2],[5,1,1,3,1],[5,1,6,20,1],[5,1,10,30,1],[5,1,6,13,1],[5,1,0,3,1],[5,1,3,15,1],[5,2,8,6,1],[5,1,26,37,1],[5,1,16,35,1],[5,1,9,17,1],[6,1,13,40,1],[6,2,21,32,1],[6,1,30,50,10],[6,1,5,15,2],[6,1,26,49,1],[6,2,15,35,1],[6,1,14,27,1],[6,1,4,23,1],[6,1,14,50,1],[6,1,19,50,2],[6,1,5,27,1],[6,1,3,10,1],[6,1,4,8,3],[6,1,4,10,2],[6,1,12,22,1],[6,2,30,50,7],[6,1,6,16,1],[6,2,9,17,1],[6,2,5,10,2],[6,1,3,6,2],[6,2,12,45,1],[6,2,26,50,2],[6,1,7,50,1],[6,1,8,22,1],[6,1,5,12,2],[6,1,6,30,1],[6,1,16,32,1],[6,1,18,50,3],[6,2,15,47,2],[6,1,7,11,1],[6,1,11,50,4],[6,2,17,48,1],[6,1,9,12,1],[6,1,7,35,2],[6,2,12,30,1],[6,1,5,16,1],[6,2,13,47,2],[6,2,15,27,1],[6,1,4,30,1],[6,1,21,50,2],[6,1,28,50,2],[6,2,25,50,1],[6,1,2,10,1],[6,1,6,13,1],[6,1,6,10,1],[6,1,2,12,1],[6,2,10,27,1],[6,1,23,50,2],[6,2,5,8,1],[6,1,2,8,1],[6,1,9,17,1],[6,2,11,30,1],[6,1,25,50,2],[6,1,6,21,1],[6,1,9,50,2],[6,1,15,35,1],[6,1,8,32,1],[6,1,1,7,1],[6,1,15,50,1],[6,1,4,9,1],[6,1,2,18,1],[6,1,5,10,3],[6,1,7,44,1],[6,1,2,6,1],[6,1,4,16,1],[6,1,17,32,1],[6,2,20,26,1],[6,1,12,17,1],[6,1,3,9,1],[6,2,4,8,1],[6,1,1,14,1],[6,1,24,50,1],[6,1,4,27,1],[6,1,2,5,1],[6,1,20,50,1],[6,1,9,22,1],[6,2,4,11,1],[6,1,4,11,1],[6,1,8,16,1],[6,1,3,7,1],[6,1,27,50,1],[6,1,2,7,1],[6,1,8,11,1],[6,2,9,20,1],[6,1,6,15,1],[6,2,9,12,1],[6,1,8,15,1],[6,1,6,14,1],[6,1,4,15,1],[6,1,9,16,1],[6,1,1,3,1],[7,1,4,10,5],[7,2,9,11,1],[7,2,4,8,1],[7,2,11,11,1],[7,1,3,6,2],[7,2,10,21,2],[7,2,9,21,1],[7,2,30,50,2],[7,1,30,50,1],[7,1,6,9,1],[7,1,3,8,3],[7,1,2,9,1],[7,1,9,27,2],[7,1,7,17,2],[7,1,11,20,1],[7,1,2,7,2],[7,2,7,14,1],[7,2,8,14,2],[7,1,6,14,2],[7,1,3,7,3],[7,1,5,11,1],[7,1,10,25,1],[7,2,10,20,1],[7,2,8,20,1],[7,2,6,20,1],[7,1,8,7,1],[7,1,3,9,1],[7,1,5,10,2],[7,1,2,4,3],[7,1,8,25,1],[7,1,3,4,2],[7,2,8,9,2],[7,1,3,10,1],[7,2,6,6,1],[7,2,6,9,1],[7,2,10,10,1],[7,2,14,42,1],[7,2,5,9,1],[7,1,4,6,1],[7,2,19,25,1],[7,1,7,19,3],[7,1,19,25,1],[7,2,19,31,1],[7,1,11,16,1],[7,1,14,25,1],[7,1,16,50,2],[7,2,16,20,1],[7,2,6,7,1],[7,1,6,13,1],[7,2,11,7,1],[7,1,2,5,2],[7,2,12,9,1],[7,2,7,12,1],[7,1,2,6,1],[7,1,13,16,2],[7,2,20,31,1],[7,2,9,9,1],[7,2,6,14,1],[7,2,9,13,1],[7,1,5,18,1],[7,1,6,11,1],[7,1,9,25,1],[7,2,12,8,1],[8,1,1,6,1],[8,1,13,15,1],[8,1,2,6,1],[8,1,3,10,1],[8,2,18,35,2],[8,1,5,9,1],[8,1,14,15,1],[8,1,5,15,2],[8,1,9,25,1],[8,1,2,3,2],[8,2,19,17,1],[8,2,19,35,1],[8,2,9,10,1],[8,1,11,20,1],[8,1,30,50,1],[8,1,13,37,1],[8,1,7,19,1],[8,1,4,10,1],[8,2,18,17,1]],"dongCounts":{"연남동":163,"망원동":75,"연희동":41,"합정동":74,"성수동2가":136,"신당동":100,"이태원동":99,"송파동":56,"문래동3가":16},"rooms":[{"id":"B2","type":"B","name":"합정동 신축 상가","dong":"합정동","yr":"2026년 신축","walk":"","ll":[0,0],"why":"첫입주 신축이라 공사 없이 인테리어만 하면 됩니다. 소액 보증금이라 첫 사례로 가장 빠른 유형입니다.","demo":1,"units":[{"f":"1층 A","a":"약 45㎡","p":"2,000/230"},{"f":"1층 B","a":"약 70㎡","p":"3,000/240"},{"f":"2층","a":"약 35㎡","p":"2,000/150"}]},{"id":"A1","type":"A","name":"연희동 1960년대 2층 건물","dong":"연희동","yr":"1960년대 준공","walk":"","ll":[0,0],"why":"오래된 소형 건물의 1·2층이 함께 비어 가는 유형입니다. 통째로 고쳐 가게 2~3칸을 만들기 좋은 크기입니다.","demo":0,"units":[{"f":"1층","a":"약 25㎡","p":"2,000/160"},{"f":"2층","a":"약 95㎡","p":"2,000/300"}]},{"id":"A4","type":"A","name":"연남동 골목 4층 상가","dong":"연남동","yr":"1990년대 준공","walk":"","ll":[0,0],"why":"연남동 골목 안 무권리 자리 유형입니다. 1층(반 층 높이)과 지하를 묶어 가게 2~3개를 함께 엽니다.","demo":1,"units":[{"f":"1층 A","a":"약 45㎡","p":"3,000/230"},{"f":"1층 B","a":"약 65㎡","p":"4,000/280"},{"f":"지하","a":"약 50㎡","p":"4,000/280"}]},{"id":"B1","type":"B","name":"성수동 신축 5층","dong":"성수동2가","yr":"2026년 신축","walk":"","ll":[0,0],"why":"여러 층이 첫입주 공실인 신축 유형입니다. 층 단위로 빌려 작은 브랜드 쇼룸·공방으로 나누는 마스터리스 실험 후보입니다.","demo":0,"units":[{"f":"2층","a":"약 85㎡","p":"6,000/410"},{"f":"3층","a":"약 85㎡","p":"6,000/400"},{"f":"4층","a":"약 85㎡","p":"6,000/390"},{"f":"5층","a":"약 85㎡","p":"6,000/400"}]},{"id":"A2","type":"A","name":"망원동 시장 앞 4층","dong":"망원동","yr":"1980년대 준공","walk":"","ll":[0,0],"why":"1~3층이 동시에 비어 있는 유형입니다. 시장 유동 인구를 살려 층별로 업종을 구성합니다.","demo":0,"units":[{"f":"1층","a":"약 27㎡","p":"7,000/400"},{"f":"2층","a":"약 150㎡","p":"8,000/380"},{"f":"3층","a":"약 90㎡","p":"5,000/240"}]},{"id":"A3","type":"A","name":"망원동 사거리 코너 5층","dong":"망원동","yr":"1980년대 준공","walk":"","ll":[0,0],"why":"대로변 코너 건물 유형입니다. 위층 대형 공실을 작은 가게·작업실로 나누기 좋습니다.","demo":0,"units":[{"f":"1층","a":"약 27㎡","p":"3,000/200"},{"f":"2층","a":"약 160㎡","p":"7,000/350"},{"f":"3층","a":"약 155㎡","p":"5,000/310"}]},{"id":"A5","type":"A","name":"문래동 창작촌 3층","dong":"문래동3가","yr":"1980년대 준공","walk":"","ll":[0,0],"why":"창작촌 생활권 유형입니다. 공방·갤러리형 가게와 큐레이션 네트워크를 연결하기 좋습니다.","demo":0,"units":[{"f":"1층 A","a":"약 40㎡","p":"3,000/200"},{"f":"1층 B","a":"약 90㎡","p":"6,000/390"}]}],"tot":{"ads":10612,"uniq":4806,"f1":2256,"vacPct":32,"est":750}}</script>
+<script>
+(function () {
+const D = JSON.parse(document.getElementById('data').textContent);
+const app = document.getElementById('app');
+const MEM = {};
+const LS = {
+  get(k, d) { let raw = null; try { raw = localStorage.getItem('gm_' + k); } catch (e) { raw = MEM[k] === undefined ? null : MEM[k]; } if (raw == null && MEM[k] !== undefined) raw = MEM[k]; try { const v = JSON.parse(raw); return v == null ? d : v; } catch (e) { return d; } },
+  set(k, v) { const s = JSON.stringify(v); MEM[k] = s; try { localStorage.setItem('gm_' + k, s); } catch (e) {} }
+};
+const ROLES = {
+  shop: ['장사할 사람', '가게 자리를 찾고 있어요', '가게'],
+  owner: ['임대인', '비어 있는 건물이 있어요', '건물'],
+  arch: ['건축가', '설계·기획을 맡고 싶어요', '설계'],
+  interior: ['인테리어·시공', '공사를 맡고 싶어요', '공사'],
+  invest: ['투자자', '소형 개발에 참여하고 싶어요', '돈']
+};
+const DONGS = D.dongs.map(d => d.n);
+const U = D.units || []; // [id, di, f, floorInfo, area, dep, rent, lat, lng, title, cls]
+const PUB = D.mode === 'public';
+const RB = [[0, 100], [100, 150], [150, 200], [200, 250], [250, 300], [300, 400], [400, 600], [600, 99999]];
+function histo(cells) { const h = RB.map(() => 0); cells.forEach(c => { const r = c[3] * 20 + 10; const i = RB.findIndex(([a, b]) => r >= a && r < b); if (i >= 0) h[i] += c[4]; }); return h; }
+function histoHtml(h) { const mx = Math.max(1, ...h); return RB.map(([a, b], i) => `<div class="hbar"><span class="n" style="width:76px">${b >= 99999 ? a + '만 이상' : a + '~' + b + '만'}</span><div class="b"><i style="width:${h[i] / mx * 100}%"></i></div><em>${h[i]}칸</em></div>`).join(''); }
+const CLS = { v: '공실·무권리 명시', m: '공실 언급(확인 필요)', u: '글에 표시 없음', o: '권리금·양도 언급' };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const won = v => { if (!isFinite(v)) return '-'; if (v >= 10000) { const e = Math.floor(v / 10000), r = v % 10000; return e + '억' + (r ? ' ' + r.toLocaleString() : ''); } return v.toLocaleString(); };
+const py = a => Math.round(a / 3.3058 * 10) / 10;
+const nav = id => 'https://m.land.naver.com/article/info/' + id;
+const odd = u => u[6] < 80 || u[6] / (u[4] / 3.3058) < 5;
+const byRent = (a, b) => (odd(a) - odd(b)) || (a[6] - b[6]);
+const state = {
+  role: LS.get('role', null),
+  route: location.hash || '', mapDong: LS.get('mapDong', '연남동'), mapFloor: 1, mapVacOnly: true, mapMaxRent: 0, mapSel: null, listN: 20,
+};
+function pledges() { return LS.get('pledges', {}); }
+function roomProgress(r) { const p = pledges()[r.id] || []; const base = r.demo || 0; const taken = new Set(p); let n = Math.min(r.units.length, base + taken.size); return { n, total: r.units.length, pct: Math.round(n / r.units.length * 100), mine: p }; }
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+
+/* ---------- icons ---------- */
+const IC = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  room: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 7h3M13 7h3M8 11h3M13 11h3M10 21v-4h4v4"/></svg>',
+  data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>'
+};
+
+/* ---------- shell ---------- */
+function shell(body, tab) {
+  const r = state.role ? ROLES[state.role][0] : '';
+  return `<div class="top"><div class="logo">가게<span>먼저</span></div><div class="r">${r ? `<button class="pill" data-go="#me">${esc(r)}</button>` : ''}<span class="pill demo">${PUB ? '공개 예시판' : '시연판'}</span></div></div>
+  ${body}
+  <nav class="tab">${[['#home', '홈', 'home'], ['#map', '빈 자리', 'map'], ['#rooms', '프로젝트', 'room'], ['#data', '데이터', 'data'], ['#me', '내 정보', 'me']].map(([h, t, i]) => `<a href="${h}" data-go="${h}" class="${tab === h ? 'on' : ''}">${IC[i]}${t}</a>`).join('')}</nav>`;
+}
+
+/* ---------- start ---------- */
+function vStart() {
+  app.innerHTML = `<div class="hero"><div class="tiny" style="color:#7FE0B5;font-weight:800">부동산개발 연결 플랫폼 · 시연판</div>
+    <h1>가게<span>먼저</span></h1>
+    <p>장사할 사람이 먼저 모이면,<br>건물·설계·공사·돈이 따라옵니다.</p>
+    <div class="facts"><div><b>약 ${D.tot.est}칸</b><span>9개 동 빈 1층 가게 자리 (추정)</span></div><div><b>${D.tot.vacPct}%</b><span>1층 광고 중 공실·무권리 명시</span></div><div><b>${D.rooms.length}곳</b><span>${PUB ? '예시 프로젝트 방' : '첫 프로젝트 후보 건물'}</span></div></div>
+    <div class="tiny" style="color:#9fb3ab;margin-top:10px">네이버페이 부동산 광고 ${esc(D.asOf)} ${PUB ? '집계 통계' : '기준 · 중개사 확인 전'}</div></div>
+  <div class="wrap"><h2>어떤 분이세요?</h2><p class="muted">고르신 역할에 맞춰 첫 화면이 바뀝니다. 나중에 '내 정보'에서 바꿀 수 있어요.</p>
+  <div class="roles">${Object.entries(ROLES).map(([k, v]) => `<button class="role" data-role="${k}"><div class="ic">${v[2]}</div><div><b>${v[0]}</b><span>${v[1]}</span></div></button>`).join('')}</div>
+  <p class="tiny" style="margin-top:14px">${PUB ? '공개 예시판입니다. 개별 매물 정보는 넣지 않았고, 숫자는 광고를 집계한 통계입니다. 프로젝트 방과 대기 팀 수는 예시입니다. 입력한 내용은 이 기기에만 저장됩니다.' : '이 시연판의 매물 정보는 내부 검토용입니다. 프로젝트 확약률·대기 팀 수 중 \'예시\' 표시는 시연용 숫자입니다.'}</p></div>`;
+}
+
+/* ---------- home ---------- */
+function myWait() { return LS.get('wait', null); }
+function matchCells(w) { return (D.cube || []).filter(c => w.dongs.includes(DONGS[c[0]]) && (w.floor2 ? true : c[1] === 1) && (c[2] * 10 + 5) >= w.amin && (c[2] * 10 + 5) <= w.amax && (c[3] * 20 + 10) <= w.rmax); }
+function matchCount(w) { return PUB ? matchCells(w).reduce((s, c) => s + c[4], 0) : matchUnits(w).length; }
+function matchUnits(w) {
+  return U.filter(u => w.dongs.includes(DONGS[u[1]]) && (w.floor2 ? true : u[2] === 1) && u[4] >= w.amin && u[4] <= w.amax && u[6] <= w.rmax && u[5] <= w.dmax && (u[10] === 'v' || u[10] === 'm'));
+}
+function roomCard(r) {
+  const p = roomProgress(r);
+  return `<div class="card tap" data-go="#room/${r.id}"><div class="row"><div><span class="tag ${r.type === 'B' ? 'g' : ''}">${r.type === 'B' ? '신축 채우기' : '리모델링'}</span><b style="font-size:15px">${esc(r.name)}</b></div><span class="tiny">${esc(r.dong)}</span></div>
+    <div class="muted" style="margin-top:4px">${esc(r.yr)}${r.walk ? ' · ' + esc(r.walk) : ''} · 빈 칸 ${r.units.length}개</div>
+    <div class="bar"><i style="width:${p.pct}%"></i></div><div class="row tiny"><span>입점 확약 ${p.n}/${p.total}${r.demo ? ' (예시 포함)' : ''}</span><span>목표 70%</span></div></div>`;
+}
+function vHome() {
+  const role = state.role;
+  let b = '';
+  if (role === 'shop') {
+    const w = myWait();
+    if (!w) {
+      b += `<div class="card dark"><b style="font-size:17px">내 조건을 올려 두세요</b><p class="muted" style="margin:6px 0 10px">동네·업종·면적·월세만 정하면, 지금 비어 있는 자리와 프로젝트 방을 찾아 드려요.</p><button class="btn" data-go="#join">대기 명단에 올리기</button></div>`;
+    } else {
+      const mc = matchCount(w);
+      b += `<div class="card dark"><div class="tiny" style="color:#7FE0B5;font-weight:800">내 조건</div><b style="font-size:16px">${esc(w.dongs.join('·'))} · ${esc(w.biz)} · ${w.amin}~${w.amax}㎡ · 월세 ${w.rmax}만 이하</b>
+      <p style="margin:10px 0 2px;font-size:28px;font-weight:800;color:#7FE0B5">${PUB ? '약 ' : ''}${mc}곳</p><p class="muted" style="margin:0 0 10px">${PUB ? '네이버 상가 광고(2026.11.5)를 집계한 통계로 본, 내 조건에 맞는 빈 자리 수' : '지금 네이버에 올라온 빈 자리 중 내 조건에 맞는 곳 (공실·무권리 명시 기준)'}</p>
+      <div class="grid2"><button class="btn" data-go="#matches">맞는 자리 보기</button><button class="btn w" data-go="#join" style="background:#fff">조건 바꾸기</button></div></div>`;
+    }
+    b += `<h3>지금 입점 확약을 받는 프로젝트</h3>` + D.rooms.slice(0, 3).map(roomCard).join('') + `<button class="btn w" data-go="#rooms">프로젝트 7곳 모두 보기</button>`;
+  } else if (role === 'owner') {
+    const mine = LS.get('bld', null);
+    b += `<div class="card dark"><b style="font-size:17px">빈 건물, 장사할 사람부터 데려옵니다</b><p class="muted" style="margin:6px 0 10px">건물을 등록하면 그 동네 대기 명단과 시세로 '어떤 가게가 몇 칸 들어올 수 있는지'를 먼저 보여 드려요.</p><button class="btn" data-go="#owner">${mine ? '내 건물 결과 다시 보기' : '건물 등록하기'}</button></div>
+    <h3>동네별 대기 명단 <span class="tag l">예시</span></h3>` + D.dongs.slice(0, 6).map(d => `<div class="hbar"><span class="n">${esc(d.n)}</span><div class="b"><i style="width:${d.wl / 25 * 100}%"></i></div><em>${d.wl}팀</em></div>`).join('') +
+    `<p class="tiny">대기 팀 수는 시연용 예시입니다. 실제 서비스에서는 등록된 장사할 사람 수가 들어갑니다.</p><h3>이렇게 진행돼요</h3>` + D.rooms.slice(0, 2).map(roomCard).join('');
+  } else if (role === 'arch' || role === 'interior') {
+    const isA = role === 'arch';
+    b += `<div class="card dark"><b style="font-size:17px">${isA ? '착공까지 가는 설계 일감' : '확정된 공사, 맡겨 둔 대금'}</b><p class="muted" style="margin:6px 0 10px">${isA ? '프로젝트 방마다 2~3팀이 기획안을 냅니다. 입점 확약이 70%를 넘으면 선정 팀과 설계 계약을 맺습니다.' : '확약이 70%를 넘은 방부터 같은 도면으로 견적을 받습니다. 1,500만원 이상 공사는 실내건축공사업 등록 업체만 참여합니다.'}</p><button class="btn" data-go="#partner">${LS.get('partner', null) ? '내 파트너 정보 보기' : '파트너 등록하기'}</button></div>
+    <h3>${isA ? '기획 경쟁을 받는 방' : '입찰이 열릴 방'}</h3>` + D.rooms.map(roomCard).join('');
+  } else if (role === 'invest') {
+    b += vInvestBody();
+  }
+  app.innerHTML = shell(`<div class="wrap">${b}<p class="tiny" style="margin-top:12px">${PUB ? '통계: 네이버페이 부동산 상가 광고 ' + esc(D.asOf) + ' 집계 · 프로젝트 방은 예시 · 개별 매물 미포함' : '매물 정보: 네이버페이 부동산 광고 ' + esc(D.asOf) + ' 기준 · 중개사 확인 전 · 내부 시연용'}</p></div>`, '#home');
+}
+function vInvestBody() {
+  const on = LS.get('invest', false);
+  return `<div class="card dark"><b style="font-size:17px">투자 연결은 아직 열지 않습니다</b><p class="muted" style="margin:6px 0 0">부동산업은 증권형 크라우드펀딩을 쓸 수 없고, 토큰증권 제도는 2027년 2월 4일 시행 예정입니다. 법률 구조가 확정되기 전에는 투자자를 공개 모집하지 않습니다.</p></div>
+  <div class="card"><b>그동안 볼 수 있는 것</b><p class="muted" style="margin:6px 0 0">· 프로젝트 방마다 실제 입점 확약 수와 확약서 원본(서비스 시작 후)<br>· 동네별 빈 자리·월세 데이터<br>· '수익 보장' 같은 문구는 쓰지 않습니다</p></div>
+  <button class="btn ${on ? 'w' : ''}" data-act="invest">${on ? '관심 등록됨 · 해제하기' : '투자 열리면 알림 받기'}</button>
+  <h3>진행 중인 프로젝트</h3>` + D.rooms.slice(0, 3).map(roomCard).join('');
+}
+
+/* ---------- join (waitlist) ---------- */
+function vJoin() {
+  const w = myWait() || { dongs: ['망원동', '연남동', '연희동'], biz: '카페', amin: 20, amax: 66, rmax: 250, dmax: 5000, floor2: false, open: '2027년 4월' };
+  const BIZ = ['카페', '베이커리', '음식점', '꽃집', '소품·편집숍', '공방', '뷰티', '기타'];
+  app.innerHTML = shell(`<div class="wrap"><h2>대기 명단에 올리기</h2><p class="muted">조건에 맞는 빈 자리나 프로젝트 방이 생기면 알려 드려요. 등록은 무료입니다.</p>
+  <label class="f">동네 (여러 곳 가능)</label><div class="chips" id="jd">${DONGS.map(n => `<span class="chip ${w.dongs.includes(n) ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
+  <label class="f">업종</label><div class="chips" id="jb">${BIZ.map(n => `<span class="chip ${w.biz === n ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
+  <div class="grid2"><div><label class="f">전용면적 최소 (㎡)</label><input class="t" id="jamin" type="number" value="${w.amin}"></div><div><label class="f">최대 (㎡)</label><input class="t" id="jamax" type="number" value="${w.amax}"></div></div>
+  <p class="tiny" id="jpy"></p>
+  <div class="grid2"><div><label class="f">월세 상한 (만원)</label><input class="t" id="jrmax" type="number" value="${w.rmax}"></div><div><label class="f">보증금 상한 (만원)</label><input class="t" id="jdmax" type="number" value="${w.dmax}"></div></div>
+  <label class="f">층</label><div class="chips" id="jf"><span class="chip ${!w.floor2 ? 'on' : ''}" data-v="1">1층만</span><span class="chip ${w.floor2 ? 'on' : ''}" data-v="2">2층도 괜찮아요</span></div>
+  <label class="f">오픈 희망 시기</label><select class="t" id="jopen">${['2026년 12월', '2027년 1월', '2027년 2월', '2027년 3월', '2027년 4월', '2027년 5월', '2027년 6월 이후'].map(o => `<option ${o === w.open ? 'selected' : ''}>${o}</option>`).join('')}</select>
+  <div style="height:14px"></div><button class="btn" data-act="saveJoin">저장하고 맞는 자리 보기</button>
+  <p class="tiny" style="margin-top:10px">시연판에서는 이 휴대폰(브라우저)에만 저장됩니다.</p></div>`, '#home');
+  const upd = () => { const a = +document.getElementById('jamin').value, b = +document.getElementById('jamax').value; document.getElementById('jpy').textContent = `약 ${py(a)}~${py(b)}평`; };
+  upd(); document.getElementById('jamin').oninput = upd; document.getElementById('jamax').oninput = upd;
+  chipGroup('jd', true); chipGroup('jb', false); chipGroup('jf', false);
+}
+function chipGroup(id, multi) {
+  const el = document.getElementById(id);
+  el.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; if (multi) c.classList.toggle('on'); else { el.querySelectorAll('.chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); } });
+}
+function onChips(id) { return [...document.querySelectorAll('#' + id + ' .chip.on')].map(c => c.dataset.v); }
+function saveJoin() {
+  const w = { dongs: onChips('jd'), biz: onChips('jb')[0] || '기타', amin: +document.getElementById('jamin').value || 0, amax: +document.getElementById('jamax').value || 999, rmax: +document.getElementById('jrmax').value || 9999, dmax: +document.getElementById('jdmax').value || 99999, floor2: onChips('jf')[0] === '2', open: document.getElementById('jopen').value, at: Date.now() };
+  if (!w.dongs.length) { toast('동네를 하나 이상 골라 주세요'); return; }
+  LS.set('wait', w); toast('대기 명단에 올렸어요'); go('#matches');
+}
+
+/* ---------- matches ---------- */
+function unitRow(u) {
+  return `<div class="unit" data-unit="${u[0]}"><div class="h"><b>${esc(DONGS[u[1]])} · ${esc(u[3])}층 · ${u[4]}㎡ <span class="tiny">(${py(u[4])}평)</span></b><span class="pr">${won(u[5])}/${won(u[6])}</span></div><div class="ds">${esc(u[9] || '(제목 없음)')}</div><div class="tiny">${u[10] === 'v' ? '<span class="tag m">공실·무권리 명시</span>' : u[10] === 'm' ? '<span class="tag l">공실 언급·확인 필요</span>' : u[10] === 'o' ? '<span class="tag l">권리금·양도 언급</span>' : '<span class="tag l">글에 표시 없음</span>'}${odd(u) ? ' <span class="tag a">가격 확인 필요</span>' : ''}</div></div>`;
+}
+function vMatchesPub(w) {
+  const cells = matchCells(w); const n = cells.reduce((s, c) => s + c[4], 0);
+  const rooms = D.rooms.filter(r => w.dongs.includes(r.dong));
+  app.innerHTML = shell(`<div class="wrap"><h2>내 조건에 맞는 빈 자리 약 ${n}곳</h2><p class="muted">${esc(w.dongs.join('·'))} · ${w.floor2 ? '1~2층' : '1층'} · ${w.amin}~${w.amax}㎡ · 월세 ${w.rmax}만 이하 · 공실·무권리를 적은 광고를 집계한 수</p>
+  <h3>월세 분포</h3>${histoHtml(histo(cells))}
+  ${rooms.length ? `<h3>이 동네 프로젝트 방 <span class="tag l">예시</span></h3>` + rooms.map(roomCard).join('') : ''}
+  <div class="card mint"><b>다음 단계</b><p class="muted" style="margin:6px 0 0">서비스가 열리면 제휴 공인중개사가 지금도 비어 있는지 확인한 자리만 골라 연락드립니다. 공개판에는 개별 매물 정보를 넣지 않았습니다(공인중개사가 아니면 매물 광고 불가).</p></div></div>`, '#home');
+}
+function vMatches() {
+  const w = myWait(); if (!w) { go('#join'); return; }
+  if (PUB) { vMatchesPub(w); return; }
+  const m = matchUnits(w).sort(byRent);
+  const rooms = D.rooms.filter(r => w.dongs.includes(r.dong));
+  app.innerHTML = shell(`<div class="wrap"><h2>내 조건에 맞는 빈 자리 ${m.length}곳</h2><p class="muted">${esc(w.dongs.join('·'))} · ${w.floor2 ? '1~2층' : '1층'} · ${w.amin}~${w.amax}㎡ · 보증금 ${won(w.dmax)} / 월세 ${w.rmax}만 이하 · 공실·무권리 명시 광고만</p>
+  ${rooms.length ? `<h3>이 동네 프로젝트 방</h3>` + rooms.map(roomCard).join('') : ''}
+  <h3>빈 자리 목록 (월세 낮은 순)</h3><div id="ml">${m.slice(0, state.listN).map(unitRow).join('') || '<p class="muted">조건에 맞는 자리가 없어요. 면적이나 월세 조건을 넓혀 보세요.</p>'}</div>
+  ${m.length > state.listN ? `<button class="btn w" data-act="more">더 보기</button>` : ''}
+  <p class="tiny" style="margin-top:12px">광고 기준이며 중개사 확인 전입니다. 계약은 개업공인중개사를 통해 진행됩니다.</p></div>`, '#home');
+}
+
+/* ---------- map ---------- */
+const TILE = (z, x, y) => `https://${'abc'[(x + y) % 3]}.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png`;
+function P(lat, lng, z) { const s = 256 * Math.pow(2, z); const x = (lng + 180) / 360 * s; const r = lat * Math.PI / 180; const y = (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * s; return [x, y]; }
+function UP(x, y, z) { const s = 256 * Math.pow(2, z); const lng = x / s * 360 - 180; const n = Math.PI - 2 * Math.PI * y / s; return [180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))), lng]; }
+function makeMap(el, center, zoom, markers, onPick) {
+  const st = { c: center.slice(), z: zoom, drag: null, moved: false, raf: 0 };
+  el.innerHTML = `<div class="layer"></div><div class="zoom"><button data-z="1">+</button><button data-z="-1">−</button></div><div class="attr">© OpenStreetMap 기여자 · HOT · OSM France</div>`;
+  const layer = el.querySelector('.layer');
+  function render() {
+    const W = el.clientWidth, H = el.clientHeight; const [cx, cy] = P(st.c[0], st.c[1], st.z); const L = cx - W / 2, T = cy - H / 2; const n = Math.pow(2, st.z); let h = '';
+    for (let tx = Math.floor(L / 256); tx <= Math.floor((L + W) / 256); tx++) for (let ty = Math.floor(T / 256); ty <= Math.floor((T + H) / 256); ty++) { if (ty < 0 || ty >= n) continue; h += `<img class="tile" src="${TILE(st.z, ((tx % n) + n) % n, ty)}" style="left:${Math.round(tx * 256 - L)}px;top:${Math.round(ty * 256 - T)}px" alt="">`; }
+    markers.forEach((m, i) => { const [x, y] = P(m.lat, m.lng, st.z); const l = x - L, t = y - T; if (l < -30 || t < -30 || l > W + 30 || t > H + 30) return; h += `<b class="mk ${m.cls}${state.mapSel === m.key ? ' sel' : ''}" data-i="${i}" style="left:${l.toFixed(1)}px;top:${t.toFixed(1)}px">${m.label || ''}</b>`; });
+    layer.innerHTML = h;
+  }
+  el.addEventListener('pointerdown', e => { if (e.target.closest('.zoom')) return; st.drag = { x: e.clientX, y: e.clientY, c: st.c.slice() }; st.moved = false; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointermove', e => { if (!st.drag) return; const dx = e.clientX - st.drag.x, dy = e.clientY - st.drag.y; if (Math.abs(dx) + Math.abs(dy) > 4) st.moved = true; const [cx, cy] = P(st.drag.c[0], st.drag.c[1], st.z); st.c = UP(cx - dx, cy - dy, st.z); if (!st.raf) st.raf = requestAnimationFrame(() => { st.raf = 0; render(); }); });
+  el.addEventListener('pointerup', e => { const wasMoved = st.moved; const d = st.drag; st.drag = null; if (!wasMoved && d) { const hit = document.elementsFromPoint(e.clientX, e.clientY).find(x => x.classList && x.classList.contains('mk')); if (hit) onPick(markers[+hit.dataset.i]); } });
+  el.querySelector('.zoom').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; st.z = Math.max(12, Math.min(18, st.z + (+b.dataset.z))); render(); });
+  render();
+  return { render, st };
+}
+function filteredUnits() {
+  const di = DONGS.indexOf(state.mapDong);
+  return U.filter(u => u[1] === di && (state.mapFloor === 0 || u[2] === state.mapFloor) && (!state.mapVacOnly || u[10] === 'v' || u[10] === 'm') && (!state.mapMaxRent || u[6] <= state.mapMaxRent));
+}
+function vMapPub() {
+  const d = D.dongs.find(x => x.n === state.mapDong) || D.dongs[0];
+  const di = DONGS.indexOf(d.n);
+  const cells = (D.cube || []).filter(c => c[0] === di && c[1] === 1);
+  app.innerHTML = shell(`<div class="wrap"><div class="chips scroll" id="md">${DONGS.map(n => `<span class="chip ${n === state.mapDong ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
+  <div class="card mint" style="padding:10px 12px"><div class="row"><div><b style="font-size:15px">${esc(d.n)} 빈 1층 약 ${d.ev}칸 (추정)</b><div class="muted">1층 중간값 ${d.ma}㎡ · ${won(d.md)}/${d.mr} · 전용평당 ${d.rp}만원</div></div><span class="tag g">${d.vp}% 공실 명시</span></div></div>
+  <div class="map" id="map"></div>
+  <div class="legend"><span>동그라미 숫자 = 동별 추정 빈 1층 칸 수 · 누르면 그 동네로 바뀝니다</span></div>
+  <h3>${esc(d.n)} 공실 표시 1층 광고 월세 분포</h3>${histoHtml(histo(cells))}
+  <div class="card" style="margin-top:12px"><b>개별 매물은 왜 안 보이나요?</b><p class="muted" style="margin:6px 0 0">공인중개사가 아니면 매물 광고를 할 수 없어서 공개판에는 통계만 넣었습니다. 실제 서비스에서는 제휴 공인중개사가 확인한 자리만 연결합니다.</p></div>
+  <p class="tiny" style="margin-top:12px">네이버페이 부동산 상가 월세 광고 ${esc(D.asOf)} 집계. 같은 칸을 여러 중개사가 올린 광고는 위치·층·면적으로 묶었습니다.</p></div>`, '#map');
+  const markers = D.dongs.map(x => ({ lat: x.c[0], lng: x.c[1], cls: 'bub' + (x.n === d.n ? ' on' : ''), label: x.n.replace(/동$/, '') + ' ' + x.ev, key: 'D' + x.n, dn: x.n }));
+  makeMap(document.getElementById('map'), d.c, 13, markers, m => { state.mapDong = m.dn; LS.set('mapDong', m.dn); vMap(); });
+  document.getElementById('md').addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; state.mapDong = c.dataset.v; LS.set('mapDong', state.mapDong); vMap(); });
+}
+function vMap() {
+  if (PUB) { vMapPub(); return; }
+  const d = D.dongs.find(x => x.n === state.mapDong) || D.dongs[0];
+  const us = filteredUnits().sort(byRent);
+  const rooms = D.rooms.filter(r => r.dong === d.n);
+  app.innerHTML = shell(`<div class="wrap"><div class="chips scroll" id="md">${DONGS.map(n => `<span class="chip ${n === state.mapDong ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
+  <div class="card mint" style="padding:10px 12px"><div class="row"><div><b style="font-size:15px">${esc(d.n)} 빈 1층 약 ${d.ev}칸 (추정)</b><div class="muted">1층 중간값 ${d.ma}㎡ · ${won(d.md)}/${d.mr} · 전용평당 ${d.rp}만원</div></div><span class="tag g">${d.vp}% 공실 명시</span></div></div>
+  <div class="chips" id="mf"><span class="chip ${state.mapFloor === 1 ? 'on' : ''}" data-v="1">1층</span><span class="chip ${state.mapFloor === 2 ? 'on' : ''}" data-v="2">2층</span><span class="chip ${state.mapFloor === 0 ? 'on' : ''}" data-v="0">1·2층</span><span class="chip ${state.mapVacOnly ? 'on' : ''}" data-v="vac">공실 명시만</span>
+  <select class="chip" id="mr" style="padding:5px 8px">${[[0, '월세 전체'], [150, '150만 이하'], [200, '200만 이하'], [300, '300만 이하'], [500, '500만 이하']].map(([v, t]) => `<option value="${v}" ${state.mapMaxRent === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+  <div class="map" id="map"></div>
+  <div class="legend"><span><i style="background:#127A5A"></i>공실·무권리 명시</span><span><i style="background:#3fae86"></i>공실 언급</span>${state.mapVacOnly ? '' : '<span><i style="background:#9aa39f"></i>표시 없음</span><span><i style="background:#c98a3a"></i>권리금·양도</span>'}<span><b class="tag" style="font-size:10px">A1</b>프로젝트 후보</span></div>
+  <h3 style="margin-top:6px">${state.mapVacOnly ? '공실 표시 광고' : '광고'} ${us.length}칸 <span class="tiny">월세 낮은 순</span></h3><div>${us.slice(0, state.listN).map(unitRow).join('')}</div>
+  ${us.length > state.listN ? `<button class="btn w" data-act="more">더 보기 (${us.length - state.listN}칸 남음)</button>` : ''}
+  <p class="tiny" style="margin-top:12px">네이버페이 부동산 광고 ${esc(D.asOf)} 기준. 같은 칸을 여러 중개사가 올린 광고는 위치·층·면적으로 묶었습니다. 실제 공실 여부는 중개사 확인 전입니다.</p></div>`, '#map');
+  const markers = us.map(u => ({ lat: u[7], lng: u[8], cls: u[10], key: u[0], u })).concat(rooms.map(r => ({ lat: r.ll[0], lng: r.ll[1], cls: 'room', label: r.id, key: 'R' + r.id, r })));
+  makeMap(document.getElementById('map'), d.c, 15, markers, m => { if (m.r) { go('#room/' + m.r.id); return; } state.mapSel = m.key; openUnit(m.u); });
+  document.getElementById('md').addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; state.mapDong = c.dataset.v; LS.set('mapDong', state.mapDong); state.listN = 20; vMap(); });
+  document.getElementById('mf').addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c || c.tagName === 'SELECT') return; const v = c.dataset.v; if (v === 'vac') state.mapVacOnly = !state.mapVacOnly; else state.mapFloor = +v; state.listN = 20; vMap(); });
+  document.getElementById('mr').addEventListener('change', e => { state.mapMaxRent = +e.target.value; state.listN = 20; vMap(); });
+}
+function openUnit(u) {
+  closeSheet();
+  const dim = document.createElement('div'); dim.className = 'dim'; dim.onclick = closeSheet;
+  const s = document.createElement('div'); s.className = 'sheet';
+  const fav = LS.get('fav', []);
+  s.innerHTML = `<div class="grab"></div><div class="tiny">${esc(DONGS[u[1]])} · 매물번호 ${u[0]}</div><div class="row" style="margin:4px 0"><b style="font-size:18px">${esc(u[3])}층 · ${u[4]}㎡ (${py(u[4])}평)</b><b style="font-size:18px;color:#127A5A">${won(u[5])}/${won(u[6])}</b></div>
+  <p class="muted" style="margin:0 0 6px">${esc(u[9] || '(제목 없음)')}</p><p class="tiny">본문 판독: ${CLS[u[10]]} · 전용평당 월세 ${Math.round(u[6] / (u[4] / 3.3058) * 10) / 10}만원</p>
+  <div class="grid2" style="margin-top:10px"><a class="btn w" href="${nav(u[0])}" target="_blank" rel="noopener">네이버에서 보기</a><button class="btn" data-act="fav" data-id="${u[0]}">${fav.includes(u[0]) ? '관심 해제' : '관심 자리 저장'}</button></div>
+  <p class="tiny" style="margin-top:10px">계약·중개는 개업공인중개사를 통해 진행됩니다. 가게먼저는 광고를 대신 올리지 않습니다.</p>`;
+  document.body.appendChild(dim); document.body.appendChild(s);
+}
+function closeSheet() { document.querySelectorAll('.sheet,.dim').forEach(x => x.remove()); }
+
+/* ---------- rooms ---------- */
+function vRooms() {
+  app.innerHTML = shell(`<div class="wrap"><h2>프로젝트 방 ${D.rooms.length}곳${PUB ? ' <span class="tag l">예시</span>' : ''}</h2><p class="muted">${PUB ? '실제 광고에서 본 \'한 건물에 빈 칸이 여러 개\'인 유형을 참고해 만든 예시 방입니다. 실제 서비스에서는 임대인이 동의한 건물만 방이 열립니다.' : '네이버 광고에서 찾은, 한 건물에 빈 칸이 여러 개인 후보입니다. 실제 서비스에서는 임대인이 동의한 건물만 방이 열립니다.'}</p>
+  <div class="chips"><span class="tag">리모델링</span><span class="muted">낡은 건물을 고쳐 가게 여러 칸으로</span></div><div class="chips"><span class="tag g">신축 채우기</span><span class="muted">새 건물 빈 층을 공사 없이 채우기</span></div>
+  ${D.rooms.map(roomCard).join('')}</div>`, '#rooms');
+}
+function vRoom(id) {
+  const r = D.rooms.find(x => x.id === id); if (!r) { go('#rooms'); return; }
+  const p = roomProgress(r); const role = state.role;
+  const done = p.pct >= 70;
+  const mine = p.mine;
+  const flag = (i) => i < (r.demo || 0) || mine.includes(i);
+  const blocks = r.units.map((u, i) => `<div class="${flag(i) ? 'ok' : ''}">${esc(u.f)} · ${esc(u.a)} ${flag(i) ? '· 확약' : '· 빈칸'}</div>`).join('');
+  const props = LS.get('props', {})[r.id];
+  app.innerHTML = shell(`<div class="wrap"><div class="tiny"><a href="#rooms" data-go="#rooms" style="color:#127A5A;text-decoration:none">← 프로젝트 목록</a></div>
+  <div class="row" style="margin-top:6px"><h2 style="margin:0">${esc(r.name)}</h2><span class="tag ${r.type === 'B' ? 'g' : ''}">${r.type === 'B' ? '신축 채우기' : '리모델링'}</span></div>
+  <p class="muted" style="margin:4px 0 10px">${esc(r.dong)} · ${esc(r.yr)}${r.walk ? ' · ' + esc(r.walk) : ''}</p>
+  <div class="bld">${blocks}</div>
+  <div class="card dark"><div class="row"><b>입점 확약 ${p.n}/${p.total}칸 (${p.pct}%)</b><span class="tiny" style="color:#cfd9d5">목표 70%</span></div><div class="bar"><i style="width:${p.pct}%"></i></div>
+  <div class="muted">${done ? '목표를 넘었습니다. 설계 계약과 인테리어 입찰이 열립니다.' : '목표에 닿으면 설계 계약·공사로 넘어갑니다. 못 채우면 예약금은 전액 돌려드립니다.'}${r.demo ? ' (확약 1칸은 시연용 예시)' : ''}</div></div>
+  <p style="font-size:14px">${esc(r.why)}</p>
+  <h3>다섯 자리</h3><div class="seats">
+   <div class="seat first"><div class="t">가게 · 가장 먼저 채우는 자리</div><b>장사할 사람 ${p.n}/${p.total}칸 확약</b><span>업종·오픈일을 정하고 예약금(월세 1개월분)을 제휴 에스크로에 맡깁니다.</span></div>
+   <div class="seat"><div class="t">건물</div><b>임대인</b><span>참여 동의 전 (지금은 광고 단계)</span></div>
+   <div class="seat"><div class="t">설계</div><b>건축가 ${props ? props.length : 0}/3팀</b><span>${r.type === 'B' ? '신축이라 큰 설계 없이 칸 나누기·인허가 검토만' : '기획 경쟁 모집 중'}</span></div>
+   <div class="seat"><div class="t">공사</div><b>인테리어·시공</b><span>${done ? '입찰 열림' : '확약 70% 뒤 입찰 열림'}</span></div>
+   <div class="seat"><div class="t">돈</div><b>임대인 자금·대출</b><span>1단계는 투자자 연결 없음</span></div></div>
+  <h3>빈 칸 (네이버 광고 기준)</h3>
+  ${r.units.map((u, i) => `<div class="u2"><div class="row"><b>${esc(u.f)} · ${esc(u.a)}</b><b>${esc(u.p)}</b></div><div class="lk" style="margin-top:4px">${(u.ids || []).map(x => `<a href="${nav(x)}" target="_blank" rel="noopener">매물 ${x}</a>`).join('')}${PUB ? '<span class="tiny">예시 칸 (실제 광고를 참고해 만든 예)</span>' : ''}</div>
+   <div style="margin-top:8px">${flag(i) ? `<span class="tag g">확약 완료${mine.includes(i) ? ' · 내 확약' : ''}</span>` : (role === 'shop' || !role ? `<button class="btn sm" data-act="pledge" data-room="${r.id}" data-i="${i}">이 칸 확약하기</button>` : `<span class="tag l">빈칸</span>`)}</div></div>`).join('')}
+  ${role === 'arch' ? `<button class="btn" data-act="propose" data-room="${r.id}">기획안 내기 (시연)</button>` : ''}
+  ${role === 'interior' ? (done ? `<button class="btn" data-act="bid" data-room="${r.id}">견적 내기 (시연)</button>` : `<div class="lock">확약이 70%를 넘으면 같은 도면으로 견적 입찰이 열립니다.</div>`) : ''}
+  ${role === 'owner' ? `<div class="lock">임대인이라면 이런 방을 내 건물로 열 수 있어요. <a href="#owner" data-go="#owner" style="color:#127A5A">건물 등록하기</a></div>` : ''}
+  <p class="tiny" style="margin-top:12px">${PUB ? '예시 방입니다. 실제 건물·매물 정보가 아닙니다.' : '광고 정보는 ' + esc(D.asOf) + ' 기준이며 중개사 확인 전입니다. 한 칸을 여러 중개사가 올려 면적·조건이 범위로 나옵니다.'}</p></div>`, '#rooms');
+}
+function pledgeFlow(roomId, i) {
+  const r = D.rooms.find(x => x.id === roomId); const u = r.units[i];
+  const rm = String(u.p).match(/\/\s*([\d,]+)/); const rent = rm ? parseInt(rm[1].replace(/,/g, '')) : 0;
+  closeSheet();
+  const dim = document.createElement('div'); dim.className = 'dim'; dim.onclick = closeSheet;
+  const s = document.createElement('div'); s.className = 'sheet';
+  s.innerHTML = `<div class="grab"></div><b style="font-size:17px">${esc(r.name)} · ${esc(u.f)} 확약</b><p class="muted" style="margin:6px 0">입점 의향과 예약금을 맡기면 이 칸이 '확약'으로 바뀝니다.</p>
+  <label class="f">업종</label><input class="t" id="pb" value="${esc((myWait() || {}).biz || '카페')}">
+  <label class="f">오픈 희망</label><input class="t" id="po" value="${esc((myWait() || {}).open || '2027년 4월')}">
+  <div class="card mint" style="margin-top:12px"><div class="row"><span>예약금 (월세 1개월분)</span><b>${rent ? rent + '만원' : '협의'}</b></div><div class="tiny" style="margin-top:4px">제휴 은행 에스크로에 보관 · 목표 70% 미달 시 전액 환불 · 임대차 계약 때 보증금 일부로 전환</div></div>
+  <button class="btn" data-act="pledgeOk" data-room="${r.id}" data-i="${i}">예약금 맡기고 확약하기 (시연)</button><p class="tiny" style="margin-top:8px;text-align:center">시연판이라 실제 결제는 일어나지 않습니다.</p>`;
+  document.body.appendChild(dim); document.body.appendChild(s);
+}
+
+/* ---------- owner ---------- */
+function vOwner() {
+  const b = LS.get('bld', { dong: '연희동', name: '', area1: 60, floors: ['1층', '2층'], rent: 300, year: 1985 });
+  let result = '';
+  if (LS.get('bldSaved', false)) {
+    const d = D.dongs.find(x => x.n === b.dong);
+    const est = Math.round(d.rp * py(b.area1));
+    const lo = Math.round(est * 0.8), hi = Math.round(est * 1.2);
+    const near = PUB ? ((D.dongCounts || {})[d.n] || 0) : U.filter(u => d && u[1] === DONGS.indexOf(d.n) && u[2] === 1 && (u[10] === 'v' || u[10] === 'm')).length;
+    const diff = b.rent > hi ? '시세보다 높습니다. 공실이 길어질 수 있어요.' : b.rent < lo ? '시세보다 낮습니다. 대기 팀 모집이 빠를 거예요.' : '시세 범위 안입니다.';
+    result = `<div class="card dark"><div class="tiny" style="color:#7FE0B5;font-weight:800">내 건물 결과</div><b style="font-size:16px">${esc(b.dong)} ${esc(b.name || '등록 건물')} · 1층 ${b.area1}㎡</b>
+    <p style="margin:10px 0 2px;font-size:24px;font-weight:800;color:#7FE0B5">1층 시세 약 ${lo}~${hi}만원</p><p class="muted" style="margin:0">이 동 1층 광고 중간값 전용평당 ${d.rp}만원 기준. 희망 ${b.rent}만원은 ${diff}</p>
+    <div class="grid2" style="margin-top:12px"><div class="stat" style="background:#1c3a31"><b style="color:#7FE0B5">${d.wl}팀</b><span style="color:#cfd9d5">이 동 대기 명단 (예시)</span></div><div class="stat" style="background:#1c3a31"><b style="color:#7FE0B5">${near}칸</b><span style="color:#cfd9d5">같은 동 공실·무권리 1층 광고</span></div></div>
+    <p class="muted" style="margin-top:10px">빈 칸이 이렇게 많을 때는 '먼저 들어올 가게'를 확보한 건물이 이깁니다. 프로젝트 방을 열면 대기 팀에게 알림이 가고, 확약이 70%를 넘으면 설계·공사로 넘어갑니다.</p>
+    <button class="btn" data-act="openRoom">프로젝트 방 열기 신청 (시연)</button></div>`;
+  }
+  app.innerHTML = shell(`<div class="wrap"><h2>건물 등록하기</h2><p class="muted">광고를 대신 올리지 않습니다. 등록한 건물은 대기 명단과 맞춰 보고, 동의하시면 프로젝트 방으로 엽니다.</p>${result}
+  <label class="f">동네</label><select class="t" id="od">${DONGS.map(n => `<option ${n === b.dong ? 'selected' : ''}>${n}</option>`).join('')}</select>
+  <label class="f">건물 이름 (선택)</label><input class="t" id="on" value="${esc(b.name)}" placeholder="예: ○○빌딩">
+  <div class="grid2"><div><label class="f">1층 전용면적 (㎡)</label><input class="t" id="oa" type="number" value="${b.area1}"></div><div><label class="f">사용승인 연도</label><input class="t" id="oy" type="number" value="${b.year}"></div></div>
+  <label class="f">비어 있는 층</label><div class="chips" id="of">${['지하', '1층', '2층', '3층 이상', '건물 전체'].map(n => `<span class="chip ${b.floors.includes(n) ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
+  <label class="f">희망 1층 월세 (만원)</label><input class="t" id="or" type="number" value="${b.rent}">
+  <div style="height:14px"></div><button class="btn" data-act="saveOwner">시세와 대기 명단 확인하기</button></div>`, '#home');
+  chipGroup('of', true);
+}
+function saveOwner() {
+  const b = { dong: document.getElementById('od').value, name: document.getElementById('on').value, area1: +document.getElementById('oa').value || 0, year: +document.getElementById('oy').value || 0, floors: onChips('of'), rent: +document.getElementById('or').value || 0 };
+  LS.set('bld', b); LS.set('bldSaved', true); vOwner(); window.scrollTo(0, 0);
+}
+
+/* ---------- partner ---------- */
+function vPartner() {
+  const p = LS.get('partner', { name: '', no: '', kind: state.role === 'interior' ? '인테리어·시공' : '건축사사무소' });
+  app.innerHTML = shell(`<div class="wrap"><h2>파트너 등록</h2><p class="muted">설계는 건축사사무소, 1,500만원 이상 실내건축 공사는 실내건축공사업 등록 업체만 참여합니다. 등록번호는 서비스 시작 후 KISCON 등으로 확인해 배지를 붙입니다.</p>
+  <label class="f">분야</label><div class="chips" id="pk">${['건축사사무소', '인테리어·시공', '종합건설'].map(n => `<span class="chip ${p.kind === n ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
+  <label class="f">사무소·업체 이름</label><input class="t" id="pn" value="${esc(p.name)}" placeholder="예: ○○건축사사무소">
+  <label class="f">등록번호 (건축사사무소 신고번호 / 건설업 등록번호)</label><input class="t" id="pno" value="${esc(p.no)}" placeholder="서비스 시작 후 확인">
+  <div style="height:14px"></div><button class="btn" data-act="savePartner">저장하기</button>
+  <h3>참여할 수 있는 방</h3>${D.rooms.map(roomCard).join('')}</div>`, '#home');
+  chipGroup('pk', false);
+}
+
+/* ---------- data ---------- */
+function vData() {
+  const maxEv = Math.max(...D.dongs.map(d => d.ev));
+  app.innerHTML = shell(`<div class="wrap"><h2>지금 비어 있는 곳 (데이터)</h2><p class="muted">네이버페이 부동산 상가 월세 광고 ${esc(D.asOf)} 조회. 9개 동 광고 ${D.tot.ads.toLocaleString()}건을 위치·층·면적으로 묶어 ${D.tot.uniq.toLocaleString()}칸, 그중 1층 ${D.tot.f1.toLocaleString()}칸.</p>
+  <div class="stats"><div class="stat"><b>약 ${D.tot.est}칸</b><span>추정 빈 1층 자리</span></div><div class="stat"><b>${D.tot.vacPct}%</b><span>1층 표본 450건 중 공실·무권리 명시</span></div></div>
+  <h3>동별 추정 빈 1층</h3>${D.dongs.slice().sort((a, b) => b.ev - a.ev).map(d => `<div class="hbar"><span class="n">${esc(d.n)}</span><div class="b"><i style="width:${d.ev / maxEv * 100}%"></i></div><em>${d.ev}칸</em></div>`).join('')}
+  <h3>동별 1층 시세</h3><table class="dt"><tr><th>동</th><th>1층 중간값</th><th>평당</th><th>통임대 평당</th><th>30년+</th></tr>
+  ${D.dongs.map(d => `<tr class="${['망원동', '연남동', '연희동'].includes(d.n) ? 'us' : ''}"><td>${esc(d.n)}</td><td>${d.ma}㎡ · ${won(d.md)}/${d.mr}</td><td>${d.rp}만</td><td>${d.gm ? d.gm + '만' : '-'}</td><td>${d.o30}%</td></tr>`).join('')}</table>
+  <p class="tiny">평당 = 월세 ÷ 전용평(만원). 통임대 평당 = 건물 통째 월세 ÷ 연면적평. 30년+ = 1층 표본 광고 건물 중 사용승인 30년 넘은 비율. 초록 줄은 첫 지역(망원·연남·연희).</p>
+  <div class="card mint" style="margin-top:12px"><b>읽는 법</b><p class="muted" style="margin:6px 0 0">· 빈 자리는 모자라지 않다. 모자란 건 들어갈 사람과 초기 자금<br>· 1층 광고 건물 64%가 30년 넘음 → 리모델링 수요<br>· 성수동2가·합정·신당에는 층째로 빈 신축 → 공사 없이 채우기<br>· 연희·신당은 통임대가 칸별의 절반 수준 → 마스터리스 후보 (단순 비교)</p></div>
+  <p class="tiny">'공실 명시'는 1층 무작위 표본 50건씩의 광고 글 판독 결과라 동별 ±14%p 오차가 있을 수 있습니다.</p></div>`, '#data');
+}
+
+/* ---------- me ---------- */
+function vMe() {
+  const w = myWait(), b = LS.get('bldSaved', false) ? LS.get('bld', null) : null, pl = pledges(), fav = LS.get('fav', []), part = LS.get('partner', null);
+  const plList = Object.entries(pl).flatMap(([rid, arr]) => arr.map(i => { const r = D.rooms.find(x => x.id === rid); return r ? `${r.name} · ${r.units[i].f}` : ''; })).filter(Boolean);
+  app.innerHTML = shell(`<div class="wrap"><h2>내 정보</h2>
+  <div class="card"><div class="row"><b>역할</b><span>${state.role ? esc(ROLES[state.role][0]) : '-'}</span></div><div class="chips" id="mrole" style="margin-top:8px">${Object.entries(ROLES).map(([k, v]) => `<span class="chip ${k === state.role ? 'on' : ''}" data-v="${k}">${v[0]}</span>`).join('')}</div></div>
+  <div class="card"><b>대기 명단</b><p class="muted" style="margin:4px 0 0">${w ? esc(w.dongs.join('·') + ' · ' + w.biz + ' · ' + w.amin + '~' + w.amax + '㎡ · 월세 ' + w.rmax + '만 이하 · ' + w.open) : '아직 없음'}</p></div>
+  <div class="card"><b>내 확약</b><p class="muted" style="margin:4px 0 0">${plList.length ? plList.map(esc).join('<br>') : '아직 없음'}</p></div>
+  <div class="card"><b>관심 자리</b><p class="muted" style="margin:4px 0 0">${fav.length ? fav.length + '곳 · ' + fav.slice(0, 5).map(x => `<a href="${nav(x)}" target="_blank" rel="noopener">${x}</a>`).join(', ') : '아직 없음'}</p></div>
+  <div class="card"><b>내 건물 · 파트너</b><p class="muted" style="margin:4px 0 0">${b ? esc(b.dong + ' ' + (b.name || '등록 건물')) : '건물 없음'} · ${part ? esc(part.kind + ' ' + part.name) : '파트너 등록 없음'}</p></div>
+  <button class="btn w" data-act="reset">시연 기록 모두 지우기</button>
+  <p class="tiny" style="margin-top:14px">${PUB ? '공개 예시판입니다. 입력한 내용은 이 기기 브라우저에만 저장되고 서버로 보내지 않습니다. 통계는 네이버페이 부동산 상가 광고 ' + esc(D.asOf) + ' 집계입니다.' : '시연판입니다. 입력한 내용은 이 브라우저에만 저장되고 서버로 보내지 않습니다. 매물 정보는 네이버페이 부동산 광고 ' + esc(D.asOf) + ' 기준 내부 검토용입니다.'}</p></div>`, '#me');
+  document.getElementById('mrole').addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; state.role = c.dataset.v; LS.set('role', state.role); toast(ROLES[state.role][0] + ' 화면으로 바꿨어요'); vMe(); });
+}
+
+/* ---------- router & actions ---------- */
+function go(h) { state.route = h; try { if (location.hash !== h) history.pushState(null, '', h); } catch (e) {} state.listN = 20; route(); window.scrollTo(0, 0); }
+window.addEventListener('popstate', () => { state.route = location.hash || '#home'; route(); });
+function route() {
+  closeSheet();
+  const h = state.route || location.hash || '';
+  if (!state.role && h !== '#start') { vStart(); return; }
+  if (h === '#start') { vStart(); }
+  else if (h === '#map') vMap();
+  else if (h === '#rooms') vRooms();
+  else if (h.startsWith('#room/')) vRoom(h.slice(6));
+  else if (h === '#join') vJoin();
+  else if (h === '#matches') vMatches();
+  else if (h === '#owner') vOwner();
+  else if (h === '#partner') vPartner();
+  else if (h === '#data') vData();
+  else if (h === '#me') vMe();
+  else vHome();
+}
+document.addEventListener('click', e => {
+  const gEl = e.target.closest('[data-go]'); if (gEl) { e.preventDefault(); go(gEl.dataset.go); return; }
+  const rl = e.target.closest('[data-role]'); if (rl) { state.role = rl.dataset.role; LS.set('role', state.role); go(state.role === 'owner' ? '#owner' : state.role === 'shop' ? '#join' : '#home'); return; }
+  const un = e.target.closest('[data-unit]'); if (un) { const u = U.find(x => x[0] === un.dataset.unit); if (u) openUnit(u); return; }
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  const act = a.dataset.act;
+  if (act === 'saveJoin') saveJoin();
+  else if (act === 'more') { state.listN += 30; route(); }
+  else if (act === 'fav') { const f = LS.get('fav', []); const id = a.dataset.id; const i = f.indexOf(id); if (i >= 0) f.splice(i, 1); else f.push(id); LS.set('fav', f); toast(i >= 0 ? '관심 해제' : '관심 자리에 저장했어요'); closeSheet(); }
+  else if (act === 'pledge') pledgeFlow(a.dataset.room, +a.dataset.i);
+  else if (act === 'pledgeOk') { const p = pledges(); const rid = a.dataset.room; p[rid] = p[rid] || []; const i = +a.dataset.i; if (!p[rid].includes(i)) p[rid].push(i); LS.set('pledges', p); closeSheet(); const r = D.rooms.find(x => x.id === rid); const pr = roomProgress(r); toast(pr.pct >= 70 ? '목표 달성! 설계·공사 단계가 열려요' : '확약했어요 · ' + pr.n + '/' + pr.total + '칸'); vRoom(rid); }
+  else if (act === 'saveOwner') saveOwner();
+  else if (act === 'openRoom') toast('프로젝트 방 열기 신청을 받았어요 (시연)');
+  else if (act === 'savePartner') { LS.set('partner', { kind: onChips('pk')[0] || '건축사사무소', name: document.getElementById('pn').value, no: document.getElementById('pno').value }); toast('파트너 정보를 저장했어요'); }
+  else if (act === 'propose') { const pp = LS.get('props', {}); const rid = a.dataset.room; pp[rid] = pp[rid] || []; if (pp[rid].length < 3) pp[rid].push(Date.now()); LS.set('props', pp); toast('기획안을 냈어요 (시연)'); vRoom(rid); }
+  else if (act === 'bid') toast('견적을 냈어요 (시연)');
+  else if (act === 'invest') { LS.set('invest', !LS.get('invest', false)); vHome(); }
+  else if (act === 'reset') { try { Object.keys(localStorage).filter(k => k.startsWith('gm_')).forEach(k => localStorage.removeItem(k)); } catch (e) {} state.role = null; go('#start'); }
+});
+window.addEventListener('hashchange', () => { if (location.hash && location.hash !== state.route) { state.route = location.hash; state.listN = 20; route(); window.scrollTo(0, 0); } });
+route();
+})();
+</script>
+</body>
+</html>
