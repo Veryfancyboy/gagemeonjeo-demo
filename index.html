@@ -123,6 +123,30 @@ nav.tab a.on { color: var(--g); font-weight: 800; }
 .hbar .b { flex: 1; height: 14px; background: var(--bg); border-radius: 4px; overflow: hidden; }
 .hbar .b i { display: block; height: 100%; background: var(--g); }
 .hbar em { font-style: normal; width: 46px; text-align: right; font-weight: 700; flex: none; }
+.why-h { background: var(--dark); color: #fff; padding: 20px 18px 18px; }
+.why-h .k { font-size: 12px; color: var(--g2); font-weight: 800; }
+.why-h h1 { font-size: 25px; margin: 6px 0 6px; letter-spacing: -0.02em; line-height: 1.3; }
+.why-h p { color: #cfd9d5; font-size: 13.5px; margin: 0; }
+.get { display: flex; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.get .no { width: 28px; height: 28px; border-radius: 9px; background: var(--mint); color: var(--g); font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; font-size: 13px; }
+.get b { display: block; font-size: 15px; margin-bottom: 2px; }
+.get span { font-size: 13px; color: #444; line-height: 1.55; display: block; }
+.promise { display: grid; gap: 6px; margin: 6px 0 4px; }
+.promise div { font-size: 13px; background: var(--bg); border-radius: 10px; padding: 8px 10px; line-height: 1.5; }
+.promise div b { color: var(--g); }
+.found { border: 1.5px dashed var(--g); border-radius: 12px; padding: 10px 12px; background: #fff; margin: 10px 0; }
+.found b { color: var(--g); }
+.mini { display: grid; gap: 6px; margin: 8px 0 2px; }
+.mini div { font-size: 13px; color: #e6ece9; line-height: 1.45; padding-left: 14px; position: relative; }
+.mini div:before { content: ''; position: absolute; left: 2px; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--g2); }
+.disc { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 8px 0; background: #fff; }
+.disc .t { font-size: 11px; color: #777; font-weight: 800; margin-bottom: 4px; }
+.disc table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.disc td { padding: 3px 0; vertical-align: top; }
+.disc td:first-child { color: #777; width: 92px; }
+.chk { font-size: 12.5px; margin: 2px 0; }
+.chk.ok { color: var(--g); font-weight: 700; } .chk.no { color: #b45309; }
+.ext { display: flex; align-items: center; justify-content: center; gap: 6px; border: 1.5px solid #03c75a; color: #03a14a; background: #fff; border-radius: 12px; padding: 11px; font-weight: 800; font-size: 14px; text-decoration: none; margin: 8px 0; }
 .ok-big { text-align: center; padding: 18px 6px 6px; }
 .ok-big .c { width: 64px; height: 64px; border-radius: 50%; background: var(--mint); color: var(--g); font-size: 30px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
 </style>
@@ -144,7 +168,8 @@ const ROLES = {
   owner: ['임대인', '비어 있는 건물이 있어요', '건물'],
   arch: ['건축가', '설계·기획을 맡고 싶어요', '설계'],
   interior: ['인테리어·시공', '공사를 맡고 싶어요', '공사'],
-  invest: ['투자자', '소형 개발에 참여하고 싶어요', '돈']
+  invest: ['투자자', '소형 개발에 참여하고 싶어요', '돈'],
+  broker: ['공인중개사', '확약한 손님과 계약을 맺고 싶어요', '중개']
 };
 const DONGS = D.dongs.map(d => d.n);
 const U = D.units || []; // [id, di, f, floorInfo, area, dep, rent, lat, lng, title, cls]
@@ -193,6 +218,7 @@ function vStart() {
     <div class="tiny" style="color:#9fb3ab;margin-top:10px">네이버페이 부동산 광고 ${esc(D.asOf)} ${PUB ? '집계 통계' : '기준 · 중개사 확인 전'}</div></div>
   <div class="wrap"><h2>어떤 분이세요?</h2><p class="muted">고르신 역할에 맞춰 첫 화면이 바뀝니다. 나중에 '내 정보'에서 바꿀 수 있어요.</p>
   <div class="roles">${Object.entries(ROLES).map(([k, v]) => `<button class="role" data-role="${k}"><div class="ic">${v[2]}</div><div><b>${v[0]}</b><span>${v[1]}</span></div></button>`).join('')}</div>
+  <button class="btn w" data-go="#law" style="margin-top:12px">실제 공실, 법 안에서 이렇게 보여 드립니다</button>
   <p class="tiny" style="margin-top:14px">${PUB ? '공개 예시판입니다. 개별 매물 정보는 넣지 않았고, 숫자는 광고를 집계한 통계입니다. 프로젝트 방과 대기 팀 수는 예시입니다. 입력한 내용은 이 기기에만 저장됩니다.' : '이 시연판의 매물 정보는 내부 검토용입니다. 프로젝트 확약률·대기 팀 수 중 \'예시\' 표시는 시연용 숫자입니다.'}</p></div>`;
 }
 
@@ -215,7 +241,7 @@ function vHome() {
   if (role === 'shop') {
     const w = myWait();
     if (!w) {
-      b += `<div class="card dark"><b style="font-size:17px">내 조건을 올려 두세요</b><p class="muted" style="margin:6px 0 10px">동네·업종·면적·월세만 정하면, 지금 비어 있는 자리와 프로젝트 방을 찾아 드려요.</p><button class="btn" data-go="#join">대기 명단에 올리기</button></div>`;
+      b += whyMini('shop');
     } else {
       const mc = matchCount(w);
       b += `<div class="card dark"><div class="tiny" style="color:#7FE0B5;font-weight:800">내 조건</div><b style="font-size:16px">${esc(w.dongs.join('·'))} · ${esc(w.biz)} · ${w.amin}~${w.amax}㎡ · 월세 ${w.rmax}만 이하</b>
@@ -225,15 +251,18 @@ function vHome() {
     b += `<h3>지금 입점 확약을 받는 프로젝트</h3>` + D.rooms.slice(0, 3).map(roomCard).join('') + `<button class="btn w" data-go="#rooms">프로젝트 7곳 모두 보기</button>`;
   } else if (role === 'owner') {
     const mine = LS.get('bld', null);
-    b += `<div class="card dark"><b style="font-size:17px">빈 건물, 장사할 사람부터 데려옵니다</b><p class="muted" style="margin:6px 0 10px">건물을 등록하면 그 동네 대기 명단과 시세로 '어떤 가게가 몇 칸 들어올 수 있는지'를 먼저 보여 드려요.</p><button class="btn" data-go="#owner">${mine ? '내 건물 결과 다시 보기' : '건물 등록하기'}</button></div>
+    b += `${whyMini('owner')}
     <h3>동네별 대기 명단 <span class="tag l">예시</span></h3>` + D.dongs.slice(0, 6).map(d => `<div class="hbar"><span class="n">${esc(d.n)}</span><div class="b"><i style="width:${d.wl / 25 * 100}%"></i></div><em>${d.wl}팀</em></div>`).join('') +
     `<p class="tiny">대기 팀 수는 시연용 예시입니다. 실제 서비스에서는 등록된 장사할 사람 수가 들어갑니다.</p><h3>이렇게 진행돼요</h3>` + D.rooms.slice(0, 2).map(roomCard).join('');
   } else if (role === 'arch' || role === 'interior') {
     const isA = role === 'arch';
-    b += `<div class="card dark"><b style="font-size:17px">${isA ? '착공까지 가는 설계 일감' : '확정된 공사, 맡겨 둔 대금'}</b><p class="muted" style="margin:6px 0 10px">${isA ? '프로젝트 방마다 2~3팀이 기획안을 냅니다. 입점 확약이 70%를 넘으면 선정 팀과 설계 계약을 맺습니다.' : '확약이 70%를 넘은 방부터 같은 도면으로 견적을 받습니다. 1,500만원 이상 공사는 실내건축공사업 등록 업체만 참여합니다.'}</p><button class="btn" data-go="#partner">${LS.get('partner', null) ? '내 파트너 정보 보기' : '파트너 등록하기'}</button></div>
+    b += `${whyMini(role)}
     <h3>${isA ? '기획 경쟁을 받는 방' : '입찰이 열릴 방'}</h3>` + D.rooms.map(roomCard).join('');
   } else if (role === 'invest') {
-    b += vInvestBody();
+    b += whyMini('invest') + vInvestBody();
+  } else if (role === 'broker') {
+    const ps = myPosts();
+    b += whyMini('broker') + (ps.length ? '<h3>내가 올린 공실 <span class="tag l">시연</span></h3>' + ps.map(postCard).join('') : '') + '<h3>담당 중개사를 찾는 방 <span class="tag l">예시</span></h3>' + D.rooms.map(roomCard).join('');
   }
   app.innerHTML = shell(`<div class="wrap">${b}<p class="tiny" style="margin-top:12px">${PUB ? '통계: 네이버페이 부동산 상가 광고 ' + esc(D.asOf) + ' 집계 · 프로젝트 방은 예시 · 개별 매물 미포함' : '매물 정보: 네이버페이 부동산 광고 ' + esc(D.asOf) + ' 기준 · 중개사 확인 전 · 내부 시연용'}</p></div>`, '#home');
 }
@@ -329,10 +358,12 @@ function vMapPub() {
   const cells = (D.cube || []).filter(c => c[0] === di && c[1] === 1);
   app.innerHTML = shell(`<div class="wrap"><div class="chips scroll" id="md">${DONGS.map(n => `<span class="chip ${n === state.mapDong ? 'on' : ''}" data-v="${n}">${n}</span>`).join('')}</div>
   <div class="card mint" style="padding:10px 12px"><div class="row"><div><b style="font-size:15px">${esc(d.n)} 빈 1층 약 ${d.ev}칸 (추정)</b><div class="muted">1층 중간값 ${d.ma}㎡ · ${won(d.md)}/${d.mr} · 전용평당 ${d.rp}만원</div></div><span class="tag g">${d.vp}% 공실 명시</span></div></div>
+  <a class="ext" href="${NAVER_DONG(d)}" target="_blank" rel="noopener">네이버 부동산에서 ${esc(d.n)} 실제 공실 보기 ↗</a>
   <div class="map" id="map"></div>
   <div class="legend"><span>동그라미 숫자 = 동별 추정 빈 1층 칸 수 · 누르면 그 동네로 바뀝니다</span></div>
+  ${myPosts().length ? '<h3>제휴 중개사 매물 <span class="tag l">시연</span></h3>' + myPosts().map(postCard).join('') : ''}
   <h3>${esc(d.n)} 공실 표시 1층 광고 월세 분포</h3>${histoHtml(histo(cells))}
-  <div class="card" style="margin-top:12px"><b>개별 매물은 왜 안 보이나요?</b><p class="muted" style="margin:6px 0 0">공인중개사가 아니면 매물 광고를 할 수 없어서 공개판에는 통계만 넣었습니다. 실제 서비스에서는 제휴 공인중개사가 확인한 자리만 연결합니다.</p></div>
+  <div class="card" style="margin-top:12px"><b>개별 매물은 왜 안 보이나요?</b><p class="muted" style="margin:6px 0 8px">공인중개사가 아니면 매물 광고를 할 수 없어서 공개판에는 통계만 넣었습니다. 서비스에서는 중개사가 직접 올린 공실과 임대인이 직접 올린 공실만 보여 드립니다.</p><button class="btn w sm" data-go="#law">법 안에서 실제 공실을 보여 주는 방법</button></div>
   <p class="tiny" style="margin-top:12px">네이버페이 부동산 상가 월세 광고 ${esc(D.asOf)} 집계. 같은 칸을 여러 중개사가 올린 광고는 위치·층·면적으로 묶었습니다.</p></div>`, '#map');
   const markers = D.dongs.map(x => ({ lat: x.c[0], lng: x.c[1], cls: 'bub' + (x.n === d.n ? ' on' : ''), label: x.n.replace(/동$/, '') + ' ' + x.ev, key: 'D' + x.n, dn: x.n }));
   makeMap(document.getElementById('map'), d.c, 13, markers, m => { state.mapDong = m.dn; LS.set('mapDong', m.dn); vMap(); });
@@ -347,6 +378,7 @@ function vMap() {
   <div class="card mint" style="padding:10px 12px"><div class="row"><div><b style="font-size:15px">${esc(d.n)} 빈 1층 약 ${d.ev}칸 (추정)</b><div class="muted">1층 중간값 ${d.ma}㎡ · ${won(d.md)}/${d.mr} · 전용평당 ${d.rp}만원</div></div><span class="tag g">${d.vp}% 공실 명시</span></div></div>
   <div class="chips" id="mf"><span class="chip ${state.mapFloor === 1 ? 'on' : ''}" data-v="1">1층</span><span class="chip ${state.mapFloor === 2 ? 'on' : ''}" data-v="2">2층</span><span class="chip ${state.mapFloor === 0 ? 'on' : ''}" data-v="0">1·2층</span><span class="chip ${state.mapVacOnly ? 'on' : ''}" data-v="vac">공실 명시만</span>
   <select class="chip" id="mr" style="padding:5px 8px">${[[0, '월세 전체'], [150, '150만 이하'], [200, '200만 이하'], [300, '300만 이하'], [500, '500만 이하']].map(([v, t]) => `<option value="${v}" ${state.mapMaxRent === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+  <a class="ext" href="${NAVER_DONG(d)}" target="_blank" rel="noopener">네이버 부동산에서 ${esc(d.n)} 실제 공실 보기 ↗</a>
   <div class="map" id="map"></div>
   <div class="legend"><span><i style="background:#127A5A"></i>공실·무권리 명시</span><span><i style="background:#3fae86"></i>공실 언급</span>${state.mapVacOnly ? '' : '<span><i style="background:#9aa39f"></i>표시 없음</span><span><i style="background:#c98a3a"></i>권리금·양도</span>'}<span><b class="tag" style="font-size:10px">A1</b>프로젝트 후보</span></div>
   <h3 style="margin-top:6px">${state.mapVacOnly ? '공실 표시 광고' : '광고'} ${us.length}칸 <span class="tiny">월세 낮은 순</span></h3><div>${us.slice(0, state.listN).map(unitRow).join('')}</div>
@@ -485,10 +517,117 @@ function vMe() {
   <div class="card"><b>내 확약</b><p class="muted" style="margin:4px 0 0">${plList.length ? plList.map(esc).join('<br>') : '아직 없음'}</p></div>
   <div class="card"><b>관심 자리</b><p class="muted" style="margin:4px 0 0">${fav.length ? fav.length + '곳 · ' + fav.slice(0, 5).map(x => `<a href="${nav(x)}" target="_blank" rel="noopener">${x}</a>`).join(', ') : '아직 없음'}</p></div>
   <div class="card"><b>내 건물 · 파트너</b><p class="muted" style="margin:4px 0 0">${b ? esc(b.dong + ' ' + (b.name || '등록 건물')) : '건물 없음'} · ${part ? esc(part.kind + ' ' + part.name) : '파트너 등록 없음'}</p></div>
+  <div class="grid2" style="margin-bottom:10px"><button class="btn w" data-go="#why/${state.role || 'shop'}">내 역할 혜택 보기</button><button class="btn w" data-go="#law">법 안에서 하는 방식</button></div>
   <button class="btn w" data-act="reset">시연 기록 모두 지우기</button>
   <p class="tiny" style="margin-top:14px">${PUB ? '공개 예시판입니다. 입력한 내용은 이 기기 브라우저에만 저장되고 서버로 보내지 않습니다. 통계는 네이버페이 부동산 상가 광고 ' + esc(D.asOf) + ' 집계입니다.' : '시연판입니다. 입력한 내용은 이 브라우저에만 저장되고 서버로 보내지 않습니다. 매물 정보는 네이버페이 부동산 광고 ' + esc(D.asOf) + ' 기준 내부 검토용입니다.'}</p></div>`, '#me');
   document.getElementById('mrole').addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; state.role = c.dataset.v; LS.set('role', state.role); toast(ROLES[state.role][0] + ' 화면으로 바꿨어요'); vMe(); });
 }
+
+/* ---------- stakeholder doors (why) ---------- */
+const WHY = {
+  shop: { k: '장사할 사람 · 예비 사장님', head: '혼자 구하면 을,<br>같이 들어가면 갑', sub: '같은 건물·골목에 들어갈 팀을 묶어 자리·조건·공사를 한 번에 풉니다.',
+    gets: [
+      ['내 조건에 맞는 빈 자리', '동네·업종·면적·월세만 넣으면 지금 비어 있는 1층 자리 수를 바로 보여 주고, 새 자리가 나오면 알려 드려요.'],
+      ['함께 입점 협상', '같은 건물에 들어갈 팀을 묶어 렌트프리·인테리어 지원·임대료를 한 번에 협상합니다. 빈 자리가 많은 지금은 임차인이 협상력을 가질 때입니다.'],
+      ['가게에 맞춘 공사', '배기·급배수·전기 용량을 설계 단계에서 미리 반영해, 들어가서 뜯고 다시 하는 공사를 줄입니다.'],
+      ['믿을 수 있는 인테리어', '등록 확인된 업체만, 같은 도면으로 견적 비교, 공정위 표준계약서, 대금은 단계별 에스크로.'],
+      ['같은 날 함께 오픈', '한 골목 가게들이 같은 날 문을 열어 오픈 홍보를 함께 합니다.']],
+    promise: ['예약금은 <b>제휴 에스크로</b>에 보관, 목표(70%) 미달 시 <b>전액 환불</b>', '임대차 계약은 <b>개업공인중개사</b>를 통해, 법정 보수 그대로', '확약 전 비용 <b>0원</b>'],
+    cost: '대기 명단·매칭·견적 비교 무료', found: '첫 50팀: 플랫폼 이용료 평생 0원, 오픈 데이 홍보 우선 (안)', cta: ['대기 명단에 올리기', '#join'] },
+  owner: { k: '임대인 · 건물주', head: '공사하기 전에<br>들어올 가게부터', sub: '빈 건물을 고칠지 말지, 어떻게 고칠지 수요 데이터로 정합니다.',
+    gets: [
+      ['공실 기간 단축', '대기 명단에서 업종·예산이 맞는 팀을 먼저 확약받고 공사를 시작합니다.'],
+      ['리모델링 판단 근거', '이 동네 1층 시세, 대기 수요, 건축가 기획안 2~3개를 나란히 놓고 고릅니다.'],
+      ['건물 가치 계산', '상가 값은 임대료로 매겨집니다. 예: 월 임대료가 300만원 오르면 수익환원율 5% 가정 시 건물 가치 약 7.2억 상승.'],
+      ['가게 구성(MD)', '서로 손님을 나누는 업종 조합으로 채워 오래 가는 건물을 만듭니다.'],
+      ['공사 관리 대행', '일정·비용·감리를 관리하고 대금은 단계 확인 후 지급합니다.']],
+    promise: ['확약 70% 전에는 <b>공사비 지출 0원</b>', '임대차는 <b>제휴 공인중개사</b>가 법정 보수로 처리', '<b>수익 보장</b> 같은 말은 하지 않습니다'],
+    cost: '건물 등록 무료 · PM 수수료는 착공 때 공용부 공사비의 3~5% (안) · 신축 채우기형은 입점 기획 정액 (안)', found: '첫 10개 건물: PM 수수료 절반 (안)', cta: ['건물 등록하기', '#owner'] },
+  arch: { k: '건축가', head: '기획만 하다 끝나는 일 대신,<br>지어지는 일', sub: '들어올 가게가 정해진 건물만 설계 계약으로 넘어갑니다.',
+    gets: [
+      ['착공 확률 높은 일감', '입점 확약 70%를 넘긴 방만 설계 계약을 맺습니다.'],
+      ['기획비 보장', '기획 경쟁에 참여하면 선정되지 않아도 기획비를 드립니다 (안).'],
+      ['수주 수수료 0원', '설계 계약에서 수수료를 떼지 않습니다.'],
+      ['실제 수요 데이터', '들어올 업종·면적·설비 요구를 기획 단계에서 미리 받습니다.'],
+      ['완공 사례 홍보', '완공 과정을 콘텐츠로 만들어 사무소 포트폴리오로 씁니다.']],
+    promise: ['설계·감리는 <b>건축사</b>만, 우리는 일정·비용 관리', '선정 기준(공사비·법규·가게 요구 반영)을 <b>미리 공개</b>'],
+    cost: '무료', found: '첫 5개 사무소: 동네 담당 건축가 지정 (안)', cta: ['파트너 등록하기', '#partner'] },
+  interior: { k: '인테리어 · 시공', head: '견적 낭비 없이,<br>돈 떼일 걱정 없이', sub: '확정된 공사만, 같은 도면으로, 맡겨 둔 대금으로.',
+    gets: [
+      ['확정 공사만 입찰', '입점 확약 70%를 넘긴 방부터 입찰이 열립니다.'],
+      ['같은 도면 견적', '비교 기준이 같아 가격만이 아니라 품질·일정으로 경쟁합니다.'],
+      ['대금 안전', '계약금·중도금·잔금을 에스크로에 맡겨 두고 단계 확인 후 지급합니다.'],
+      ['묶음 공사', '한 건물 여러 가게를 한 일정으로 진행해 이동·자재를 아낍니다.'],
+      ['등록 배지', '실내건축공사업 등록 확인 표시로 고객 신뢰를 얻습니다.']],
+    promise: ['1,500만원 이상 실내건축은 <b>등록 업체만</b> 참여', '<b>공정위 표준계약서</b> 기본 사용'],
+    cost: '입찰 참여 무료(첫 해, 안) · 낙찰 시 이용료 2~3% (안)', found: '첫 10개 업체: 이용료 1년 면제 (안)', cta: ['파트너 등록하기', '#partner'] },
+  invest: { k: '투자자', head: '보이는 개발에만,<br>법이 허락한 방식으로', sub: '확약서·에스크로·공사 진척이 공개된 프로젝트만 다룹니다.',
+    gets: [
+      ['투명한 프로젝트 정보', '입점 확약 수, 확약서 원본, 공사 단계, 대금 지급 내역을 공개합니다(서비스 시작 후).'],
+      ['동네 데이터 리포트', '동별 공실·시세·대기 수요 리포트를 받아 봅니다 (안).'],
+      ['합법적인 참여 구조', '2단계: 프로젝트 법인 사모(공개 모집 없이). 3단계: 토큰증권 제도(2027.2.4 시행 예정) 확정 뒤 인가 사업자와 함께.']],
+    promise: ['지금은 <b>투자 권유·모집을 하지 않습니다</b> (관심 등록만)', '<b>수익 보장</b> 문구 없음'],
+    cost: '없음', found: '관심 등록자에게 첫 리포트 우선 발송 (안)', cta: ['관심 등록하기', '#invest'] },
+  broker: { k: '공인중개사', head: '확약한 손님과<br>결심한 임대인을 연결합니다', sub: '계약 직전 단계의 고객을 만나고, 법정 중개보수는 그대로 받습니다.',
+    gets: [
+      ['계약 직전 고객', '예약금까지 맡긴 임차 예정자와 공사를 결심한 임대인을 연결합니다.'],
+      ['법정 보수 그대로', '가게먼저는 중개보수를 나눠 받지 않습니다.'],
+      ['프로젝트 방 담당', '방마다 담당 중개사를 지정해 임대차 계약을 맡깁니다 (안).'],
+      ['규정 맞춘 매물 등록', '중개사무소·인터넷 광고 명시사항을 입력 칸으로 받아 빠뜨리지 않게 합니다.'],
+      ['빈 자리 지도 노출', '직접 올린 공실이 동네 지도에 중개사 이름으로 보입니다.']],
+    promise: ['매물 광고의 주체는 <b>중개사님</b>, 가게먼저는 게시 공간', '허위·미끼 매물은 <b>바로 내립니다</b> (국토부 모니터링 협조)'],
+    cost: '등록·노출 무료(초기) · 이후 월 정액 광고비 (안)', found: '동별 첫 파트너: 그 동네 프로젝트 방 담당 우선권 (안)', cta: ['공실 매물 올리기 (시연)', '#post'] }
+};
+function vWhy(role) {
+  const w = WHY[role]; if (!w) { go('#start'); return; }
+  app.innerHTML = shell(`<div class="why-h"><div class="k">${esc(w.k)}</div><h1>${w.head}</h1><p>${esc(w.sub)}</p></div>
+  <div class="wrap"><h3 style="margin-top:4px">이 문에서 얻는 것</h3>
+  ${w.gets.map((g, i) => `<div class="get"><div class="no">${i + 1}</div><div><b>${esc(g[0])}</b><span>${esc(g[1])}</span></div></div>`).join('')}
+  <h3>약속</h3><div class="promise">${w.promise.map(p => `<div>${p}</div>`).join('')}</div>
+  <div class="row" style="margin-top:12px"><b style="font-size:14px">비용</b><span class="muted" style="text-align:right;max-width:72%">${esc(w.cost)}</span></div>
+  <div class="found"><b>창립 멤버 혜택</b><div class="muted" style="margin-top:3px">${esc(w.found)}</div></div>
+  <button class="btn" data-go="${w.cta[1]}" ${role === 'invest' ? 'data-act="investOn"' : ''}>${esc(w.cta[0])}</button>
+  <p class="tiny" style="margin-top:10px">(안)은 서비스 시작 전 확정할 조건입니다. <a href="#law" data-go="#law" style="color:#127A5A">법 안에서 이렇게 합니다</a></p></div>`, '#home');
+}
+function whyMini(role) {
+  const w = WHY[role]; if (!w) return '';
+  return `<div class="card dark"><div class="tiny" style="color:#7FE0B5;font-weight:800">${esc(w.k)}</div><b style="font-size:17px">${w.head.replace('<br>', ' ')}</b>
+  <div class="mini">${w.gets.slice(0, 3).map(g => `<div><b>${esc(g[0])}</b> · ${esc(g[1].split('.')[0])}</div>`).join('')}</div>
+  <div class="grid2" style="margin-top:10px"><button class="btn" data-go="${w.cta[1]}">${esc(w.cta[0])}</button><button class="btn w" data-go="#why/${role}" style="background:#fff">얻는 것 모두 보기</button></div></div>`;
+}
+
+/* ---------- lawful paths ---------- */
+const NAVER_DONG = d => `https://new.land.naver.com/offices?ms=${d.c[0]},${d.c[1]},16&a=SG&b=B2&e=RETAIL`;
+function vLaw() {
+  const P = [
+    ['중개사가 직접 올리는 공실', '매물 광고는 개업공인중개사만 할 수 있습니다. 제휴 중개사가 사무소 명칭·소재지·연락처·등록번호·성명과 매물의 소재지·면적·가격 등 명시사항을 넣어 직접 올리고, 가게먼저는 게시 공간을 제공합니다. 허위·미끼 매물은 바로 내리고 국토부 모니터링에 협조합니다.', '공인중개사법 제18조의2·제18조의3'],
+    ['임대인이 직접 올리는 공실', '건물 주인이 자기 건물을 직접 내놓는 것은 중개가 아닙니다. 등기부상 소유자와 대조한 뒤 노출하고, 계약은 원하시는 제휴 중개사가 맡습니다.', '직거래 등록 (네모 등도 운영)'],
+    ['네이버로 바로 가는 링크', '네이버 매물을 복사해 오지 않고, 동네별로 네이버 부동산 화면을 바로 열어 드립니다. 다른 회사 매물 DB를 긁어 와 게시하면 데이터베이스제작자 권리 침해가 됩니다(네이버 대 다윈중개, 특허법원 2025.12.24 판결, 8,000만원 배상).', '저작권법 제93조'],
+    ['우리 중개법인 (2단계)', '자본금 5천만원 이상, 공인중개사 대표, 임원 3분의 1 이상 공인중개사 등을 갖춰 중개법인을 세우면 직접 중개하고 임대관리·개발 상담·분양대행까지 할 수 있습니다. 공사 관리·플랫폼은 별도 회사로 둡니다.', '공인중개사법 시행령 제13조, 법 제14조'],
+    ['우리 돈은 우리 몫만', '예약금·공사대금은 제휴 에스크로에 맡기고, 중개보수는 나눠 받지 않으며, 투자는 법률 구조 확정 전까지 모집하지 않습니다.', '전자금융·자본시장 관련 법 검토 후 시행']];
+  app.innerHTML = shell(`<div class="wrap"><h2>실제 공실, 법 안에서 이렇게 보여 드립니다</h2><p class="muted">공개판에 개별 매물이 없는 이유와, 서비스에서 실제 공실을 보여 주는 합법적인 길입니다.</p>
+  ${P.map((p, i) => `<div class="card"><div class="row"><b style="font-size:15px">${i + 1}. ${esc(p[0])}</b></div><p class="muted" style="margin:6px 0 4px">${esc(p[1])}</p><span class="tag l">${esc(p[2])}</span></div>`).join('')}
+  <p class="tiny">공개 자료를 정리한 것이며 법률 자문이 아닙니다. 출시 전 부동산·금융 전문 변호사 검토를 거칩니다.</p></div>`, '#map');
+}
+
+/* ---------- broker posting (demo) ---------- */
+const POST_FIELDS = [['office', '중개사무소 명칭'], ['ceo', '개업공인중개사 성명'], ['reg', '등록번호'], ['oaddr', '사무소 소재지'], ['tel', '연락처'], ['addr', '매물 소재지 (동까지)'], ['floor', '층 / 총 층수'], ['area', '전용면적 (㎡)'], ['price', '보증금 / 월세 (만원)'], ['kind', '건축물 용도'], ['aprv', '사용승인일'], ['movein', '입주 가능일']];
+function vPost() {
+  const p = LS.get('postDraft', { office: '', ceo: '', reg: '', oaddr: '', tel: '', addr: '연남동', floor: '1 / 4', area: '', price: '', kind: '제2종 근린생활시설', aprv: '', movein: '즉시' });
+  app.innerHTML = shell(`<div class="wrap"><h2>공실 매물 올리기 <span class="tag l">시연</span></h2><p class="muted">광고 주체는 중개사님입니다. 법에서 정한 명시사항을 칸마다 받아 빠뜨리지 않게 합니다.</p>
+  ${POST_FIELDS.map(([k, t]) => `<label class="f">${t}</label><input class="t pf" data-k="${k}" value="${esc(p[k])}">`).join('')}
+  <div class="card mint" style="margin-top:12px" id="pchk"></div>
+  <button class="btn" data-act="savePost">올리기 (시연)</button>
+  <p class="tiny" style="margin-top:8px">시연판에서는 이 기기에서만 보이고 서버로 보내지 않습니다. 서비스에서는 등록번호를 확인한 중개사만 올릴 수 있습니다.</p></div>`, '#home');
+  const upd = () => { const v = {}; document.querySelectorAll('.pf').forEach(i => v[i.dataset.k] = i.value.trim()); LS.set('postDraft', v); const miss = POST_FIELDS.filter(([k]) => !v[k]); document.getElementById('pchk').innerHTML = `<b>명시사항 확인</b>${miss.length ? `<div class="chk no">빠진 칸 ${miss.length}개: ${miss.map(m => m[1]).join(', ')}</div>` : '<div class="chk ok">모든 명시사항이 채워졌습니다</div>'}<div class="tiny">중개보조원 정보는 넣을 수 없습니다(2026.8.28 개정).</div>`; };
+  document.querySelectorAll('.pf').forEach(i => i.addEventListener('input', upd)); upd();
+}
+function postCard(p) {
+  return `<div class="disc"><div class="t">제휴 중개사 매물 · 시연</div><div class="row"><b style="font-size:15px">${esc(p.addr)} · ${esc(p.floor)}층 · ${esc(p.area)}㎡</b><b>${esc(p.price)}</b></div>
+  <table><tr><td>용도</td><td>${esc(p.kind)}</td></tr><tr><td>사용승인일</td><td>${esc(p.aprv)}</td></tr><tr><td>입주 가능</td><td>${esc(p.movein)}</td></tr>
+  <tr><td>중개사무소</td><td>${esc(p.office)} (등록번호 ${esc(p.reg)})</td></tr><tr><td>대표</td><td>${esc(p.ceo)} · ${esc(p.tel)}</td></tr><tr><td>사무소 소재지</td><td>${esc(p.oaddr)}</td></tr></table></div>`;
+}
+function myPosts() { return LS.get('posts', []); }
 
 /* ---------- router & actions ---------- */
 function go(h) { state.route = h; try { if (location.hash !== h) history.pushState(null, '', h); } catch (e) {} state.listN = 20; route(); window.scrollTo(0, 0); }
@@ -507,11 +646,15 @@ function route() {
   else if (h === '#partner') vPartner();
   else if (h === '#data') vData();
   else if (h === '#me') vMe();
+  else if (h.startsWith('#why/')) vWhy(h.slice(5));
+  else if (h === '#law') vLaw();
+  else if (h === '#post') vPost();
+  else if (h === '#invest') { LS.set('invest', true); toast('관심 등록했어요'); state.route = '#home'; vHome(); }
   else vHome();
 }
 document.addEventListener('click', e => {
   const gEl = e.target.closest('[data-go]'); if (gEl) { e.preventDefault(); go(gEl.dataset.go); return; }
-  const rl = e.target.closest('[data-role]'); if (rl) { state.role = rl.dataset.role; LS.set('role', state.role); go(state.role === 'owner' ? '#owner' : state.role === 'shop' ? '#join' : '#home'); return; }
+  const rl = e.target.closest('[data-role]'); if (rl) { state.role = rl.dataset.role; LS.set('role', state.role); go('#why/' + state.role); return; }
   const un = e.target.closest('[data-unit]'); if (un) { const u = U.find(x => x[0] === un.dataset.unit); if (u) openUnit(u); return; }
   const a = e.target.closest('[data-act]'); if (!a) return;
   const act = a.dataset.act;
@@ -521,6 +664,7 @@ document.addEventListener('click', e => {
   else if (act === 'pledge') pledgeFlow(a.dataset.room, +a.dataset.i);
   else if (act === 'pledgeOk') { const p = pledges(); const rid = a.dataset.room; p[rid] = p[rid] || []; const i = +a.dataset.i; if (!p[rid].includes(i)) p[rid].push(i); LS.set('pledges', p); closeSheet(); const r = D.rooms.find(x => x.id === rid); const pr = roomProgress(r); toast(pr.pct >= 70 ? '목표 달성! 설계·공사 단계가 열려요' : '확약했어요 · ' + pr.n + '/' + pr.total + '칸'); vRoom(rid); }
   else if (act === 'saveOwner') saveOwner();
+  else if (act === 'savePost') { const v = LS.get('postDraft', {}); const miss = POST_FIELDS.filter(([k]) => !v[k]); if (miss.length) { toast('빠진 명시사항 ' + miss.length + '개를 채워 주세요'); return; } const ps = myPosts(); ps.unshift({ ...v, at: Date.now() }); LS.set('posts', ps); toast('올렸어요 (시연)'); go('#map'); }
   else if (act === 'openRoom') toast('프로젝트 방 열기 신청을 받았어요 (시연)');
   else if (act === 'savePartner') { LS.set('partner', { kind: onChips('pk')[0] || '건축사사무소', name: document.getElementById('pn').value, no: document.getElementById('pno').value }); toast('파트너 정보를 저장했어요'); }
   else if (act === 'propose') { const pp = LS.get('props', {}); const rid = a.dataset.room; pp[rid] = pp[rid] || []; if (pp[rid].length < 3) pp[rid].push(Date.now()); LS.set('props', pp); toast('기획안을 냈어요 (시연)'); vRoom(rid); }
