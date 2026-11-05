@@ -186,7 +186,7 @@ function shell(body, tab) {
 
 /* ---------- start ---------- */
 function vStart() {
-  app.innerHTML = `<div class="hero"><div class="tiny" style="color:#7FE0B5;font-weight:800">부동산개발 연결 플랫폼 · 시연판</div>
+  app.innerHTML = `<div class="hero"><div class="tiny" style="color:#7FE0B5;font-weight:800">부동산개발 연결 플랫폼 · ${PUB ? '공개 예시판' : '시연판'}</div>
     <h1>가게<span>먼저</span></h1>
     <p>장사할 사람이 먼저 모이면,<br>건물·설계·공사·돈이 따라옵니다.</p>
     <div class="facts"><div><b>약 ${D.tot.est}칸</b><span>9개 동 빈 1층 가게 자리 (추정)</span></div><div><b>${D.tot.vacPct}%</b><span>1층 광고 중 공실·무권리 명시</span></div><div><b>${D.rooms.length}곳</b><span>${PUB ? '예시 프로젝트 방' : '첫 프로젝트 후보 건물'}</span></div></div>
